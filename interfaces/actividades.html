@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="utf-8">
+        <title> Registro Actividades </title>
+    </head>
+    <body>
+        <div class="button" id="add-activities">
+            <button type="button" id="add-activity">
+                Añadir Actividad
+            </button>
+        </div>
+        <div class="container" id="activity-container"></div>
+        <template class="activity" id="activity">
+            <form class="formulario" id="activities-register">
+                <div>
+                    <label> Nombre actividad </label>
+                    <input id="activity-name" name="activyty-name" type="text" required>
+                </div>
+                <div id="day-selector" >
+                    <legend> Días de la actividad </legend>
+                    <div id="monday-div">
+                        <input type="radio" id="day-monday" name="week-day" value="monday">
+                        <label for="day-monday"> Lunes </label>
+                    </div>
+                    <div id="tuesday-div">
+                        <input type="radio" id="day-tuesday" name="week-day" value="tuesday">
+                        <label for="day-tuesday"> Martes </label>
+                    </div>
+                    <div id="wednesday-div">
+                        <input type="radio" id="day-wednesday" name="week-day" value="wednesday">
+                        <label for="day-wednesday"> Miércoles </label>
+                    </div>
+                    <div id="thursday-div">
+                        <input type="radio" id="day-thursday" name="week-day" value="thursday">
+                        <label for="day-thursday"> Jueves </label>
+                    </div>
+                    <div id="friday-div">
+                        <input type="radio" id="day-friday" name="week-day" value="friday">
+                        <label for="day-friday"> Viernes </label>
+                    </div>
+                    <div id="saturday-div">
+                        <input type="radio" id="day-saturday" name="week-day" value="saturday">
+                        <label for="day-saturday"> Sábado </label>
+                    </div>
+                    <div id="sunday-div">
+                        <input type="radio" id="day-sunday" name="week-day" value="sunday">
+                        <label for="day-sunday"> Domingo </label>
+                    </div>
+                </div>
+                <template id="time-selector">
+                    <div>
+                        <label> Desde: </label>
+                        <input type="time" id="from-time" required>
+
+                        <label> Hasta: </label>
+                        <input type="time" id="until-time" required>
+                    </div>
+                </template>
+            </form>
+        </template>
+        <script lang="javascript" src="../js/actividades.js"></script>
+    </body>
+</html>
