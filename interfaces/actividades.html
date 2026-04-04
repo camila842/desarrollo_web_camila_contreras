@@ -6,6 +6,23 @@
         <link rel="stylesheet" href="../css/stylesheet.css">
     </head>
     <body>
+        <div class="encabezado">
+            <div class="left-side"></div>
+            <div class="right-side">
+                <a href="../interfaces/registro.html">
+                    <button class="section-linker" value="registro">Registro</button>
+                </a>
+                <a href="../interfaces/actividades.html">
+                    <button class="section-linker" value="actividades">Actividades</button>
+                </a>
+                <a href="../interfaces/Miembros.html">
+                    <button class="section-linker" value="miembros">Miembros</button>
+                </a>
+                <a href="../interfaces/metricas.html">
+                    <button class="section-linker" value="metricas">Métricas</button>
+                </a>
+            </div>
+        </div>
         <div class="container" id="form-container">
             <button type="button" id="add-activity">
                 Añadir Actividad
@@ -18,10 +35,10 @@
                     </div>
                     <div class="day-selector" >
                         <legend> Días de la actividad </legend>
-                        <div id="monday-div">
-                            <input type="radio" id="day-monday" name="week-day" value="monday">
+                        <div class="day" id="monday-div">
+                            <input type="checkbox" id="day-monday" name="week-day" value="monday">
                             <label for="day-monday"> Lunes </label>
-                            <div class="time-selector" id="time-selector">
+                            <div class="time-selector">
                                 <label> Desde: </label>
                                 <input type="time" id="from-time" required>
 
@@ -29,28 +46,28 @@
                                 <input type="time" id="until-time" required>
                             </div>
                         </div>
-                        <div id="tuesday-div">
-                            <input type="radio" id="day-tuesday" name="week-day" value="tuesday">
+                        <div class="day" id="tuesday-div">
+                            <input type="checkbox" id="day-tuesday" name="week-day" value="tuesday">
                             <label for="day-tuesday"> Martes </label>
                         </div>
-                        <div id="wednesday-div">
-                            <input type="radio" id="day-wednesday" name="week-day" value="wednesday">
+                        <div class="day" id="wednesday-div">
+                            <input type="checkbox" id="day-wednesday" name="week-day" value="wednesday">
                             <label for="day-wednesday"> Miércoles </label>
                         </div>
-                        <div id="thursday-div">
-                            <input type="radio" id="day-thursday" name="week-day" value="thursday">
+                        <div class="day" id="thursday-div">
+                            <input type="checkbox" id="day-thursday" name="week-day" value="thursday">
                             <label for="day-thursday"> Jueves </label>
                         </div>
-                        <div id="friday-div">
-                            <input type="radio" id="day-friday" name="week-day" value="friday">
+                        <div class="day" id="friday-div">
+                            <input type="checkbox" id="day-friday" name="week-day" value="friday">
                             <label for="day-friday"> Viernes </label>
                         </div>
-                        <div id="saturday-div">
-                            <input type="radio" id="day-saturday" name="week-day" value="saturday">
+                        <div class="day" id="saturday-div">
+                            <input type="checkbox" id="day-saturday" name="week-day" value="saturday">
                             <label for="day-saturday"> Sábado </label>
                         </div>
-                        <div id="sunday-div">
-                            <input type="radio" id="day-sunday" name="week-day" value="sunday">
+                        <div class="day" id="sunday-div">
+                            <input type="checkbox" id="day-sunday" name="week-day" value="sunday">
                             <label for="day-sunday"> Domingo </label>
                         </div>
                     </div>
