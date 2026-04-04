@@ -3,62 +3,72 @@
     <head>
         <meta charset="utf-8">
         <title> Registro Actividades </title>
+        <link rel="stylesheet" href="../css/stylesheet.css">
     </head>
     <body>
-        <div class="button">
+        <div class="container" id="form-container">
             <button type="button" id="add-activity">
                 Añadir Actividad
             </button>
-        </div>
-        <div class="container" id="activity-container"></div>
-        <template class="activity" id="activity-form">
-            <form class="formulario" id="activities-register">
-                <div>
-                    <label> Nombre actividad </label>
-                    <input id="activity-name" name="activyty-name" type="text" required>
-                </div>
-                <div id="day-selector" >
-                    <legend> Días de la actividad </legend>
-                    <div id="monday-div">
-                        <input type="radio" id="day-monday" name="week-day" value="monday">
-                        <label for="day-monday"> Lunes </label>
+            <form class="activities-register" id="activities-register">
+                <div class="activity-container" id="act-1">
+                    <div class="name-input">
+                        <label> Nombre actividad </label>
+                        <input id="activity-name" name="activyty-name" type="text" required>
                     </div>
-                    <div id="tuesday-div">
-                        <input type="radio" id="day-tuesday" name="week-day" value="tuesday">
-                        <label for="day-tuesday"> Martes </label>
-                    </div>
-                    <div id="wednesday-div">
-                        <input type="radio" id="day-wednesday" name="week-day" value="wednesday">
-                        <label for="day-wednesday"> Miércoles </label>
-                    </div>
-                    <div id="thursday-div">
-                        <input type="radio" id="day-thursday" name="week-day" value="thursday">
-                        <label for="day-thursday"> Jueves </label>
-                    </div>
-                    <div id="friday-div">
-                        <input type="radio" id="day-friday" name="week-day" value="friday">
-                        <label for="day-friday"> Viernes </label>
-                    </div>
-                    <div id="saturday-div">
-                        <input type="radio" id="day-saturday" name="week-day" value="saturday">
-                        <label for="day-saturday"> Sábado </label>
-                    </div>
-                    <div id="sunday-div">
-                        <input type="radio" id="day-sunday" name="week-day" value="sunday">
-                        <label for="day-sunday"> Domingo </label>
-                    </div>
-                </div>
-                <template id="time-selector">
-                    <div>
-                        <label> Desde: </label>
-                        <input type="time" id="from-time" required>
+                    <div class="day-selector" >
+                        <legend> Días de la actividad </legend>
+                        <div id="monday-div">
+                            <input type="radio" id="day-monday" name="week-day" value="monday">
+                            <label for="day-monday"> Lunes </label>
+                            <div class="time-selector" id="time-selector">
+                                <label> Desde: </label>
+                                <input type="time" id="from-time" required>
 
-                        <label> Hasta: </label>
-                        <input type="time" id="until-time" required>
+                                <label> Hasta: </label>
+                                <input type="time" id="until-time" required>
+                            </div>
+                        </div>
+                        <div id="tuesday-div">
+                            <input type="radio" id="day-tuesday" name="week-day" value="tuesday">
+                            <label for="day-tuesday"> Martes </label>
+                        </div>
+                        <div id="wednesday-div">
+                            <input type="radio" id="day-wednesday" name="week-day" value="wednesday">
+                            <label for="day-wednesday"> Miércoles </label>
+                        </div>
+                        <div id="thursday-div">
+                            <input type="radio" id="day-thursday" name="week-day" value="thursday">
+                            <label for="day-thursday"> Jueves </label>
+                        </div>
+                        <div id="friday-div">
+                            <input type="radio" id="day-friday" name="week-day" value="friday">
+                            <label for="day-friday"> Viernes </label>
+                        </div>
+                        <div id="saturday-div">
+                            <input type="radio" id="day-saturday" name="week-day" value="saturday">
+                            <label for="day-saturday"> Sábado </label>
+                        </div>
+                        <div id="sunday-div">
+                            <input type="radio" id="day-sunday" name="week-day" value="sunday">
+                            <label for="day-sunday"> Domingo </label>
+                        </div>
                     </div>
-                </template>
+                    <div class="type-selector">
+                        <label>Tipo de Actividad</label>
+                        <select id="tipo-de-actividad">
+                            <option value="">-- Seleccione --</option>
+                            <option value="deportiva">Deportiva</option>
+                            <option value="artistica">Artística</option>
+                            <option value="tecnologica">Tecnológica</option>
+                            <option value="social">Social</option>
+                            <option value="recreativa">Recreativa</option>
+                            <option value="otro">Otro</option>
+                        </select>
+                    </div>
+                </div>
             </form>
-        </template>
+        </div>
         <script lang="javascript" src="../js/actividades.js"></script>
     </body>
 </html>
