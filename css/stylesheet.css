@@ -10,15 +10,31 @@
 .time-selector.visible { 
     display: block; 
 }
-.actividad-item { 
-    border: 1px solid #ccc; padding: 10px; margin: 8px 0; border-radius: 4px; 
+
+.button { 
+    font-size: 0.85em; display: none; 
 }
-.actividad-item .tipo { 
+.button.visible { 
+    display: block; 
+}
+
+
+.form-results { 
+    border: 1px solid #ccc; padding: 10px; margin: 8px 0; border-radius: 4px; display: block;
+}
+.form-results .tipo { 
     font-size: 0.8em; color: #666; text-transform: uppercase; 
 }
-.actividad-item .nombre { 
+.form-results .nombre { 
     font-weight: bold; 
 }
 .contador { 
     color: #666; font-size: 0.9em; margin-bottom: 10px; 
+}
+
+.error {
+    color: #f80bc5; display: none;
+}
+.error.visible {
+    display: block;
 }

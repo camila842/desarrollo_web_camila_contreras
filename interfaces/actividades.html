@@ -24,14 +24,15 @@
             </div>
         </div>
         <div class="container" id="form-container">
-            <button type="button" id="add-activity">
+            <button type="button" id="add-activity" class="button visible">
                 Añadir Actividad
             </button>
             <form class="activities-register" id="activities-register">
                 <div class="activity-container" id="act-1">
                     <div class="name-input">
                         <label> Nombre actividad </label>
-                        <input id="activity-name" name="activyty-name" type="text" required>
+                        <input id="activity-name" name="activity-name" type="text" required>
+                        <span class="error" id="error-name">El nombre debe tener al menos 3 caracteres.</span>
                     </div>
                     <div class="day-selector" >
                         <legend> Días de la actividad </legend>
@@ -40,10 +41,11 @@
                             <label for="day-monday"> Lunes </label>
                             <div class="time-selector">
                                 <label> Desde: </label>
-                                <input type="time" id="from-time" required>
+                                <input type="time" class="from-time" required>
 
                                 <label> Hasta: </label>
-                                <input type="time" id="until-time" required>
+                                <input type="time" class="until-time" required>
+                                
                             </div>
                         </div>
                         <div class="day" id="tuesday-div">
@@ -70,6 +72,8 @@
                             <input type="checkbox" id="day-sunday" name="week-day" value="sunday">
                             <label for="day-sunday"> Domingo </label>
                         </div>
+                        <span class="error" id="error-horas">Debe haber hora de inicio y término.</span>
+                        <span class="error" id="error-dias">Debes seleccionar al menos un día.</span>
                     </div>
                     <div class="type-selector">
                         <label>Tipo de Actividad</label>
@@ -82,10 +86,16 @@
                             <option value="recreativa">Recreativa</option>
                             <option value="otro">Otro</option>
                         </select>
+                        <span class="error" id="error-tipo">Debes elegir el tipo de actividad.</span>
                     </div>
                 </div>
+                <button type="submit"  id="submit-activity" class="button">
+                    Inscribir Actividad
+                </button>
             </form>
+            
         </div>
+        <div id="form-results"></div>
         <script lang="javascript" src="../js/actividades.js"></script>
     </body>
 </html>
