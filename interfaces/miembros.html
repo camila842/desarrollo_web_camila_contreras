@@ -25,18 +25,18 @@
         </div>
         <div class="container">
             <h1> Consulta de miembros</h1>
-            <form class="filters-form">
+            <form id="filters-form">
                 <div class="query-filters">
                     <span>Filtrar por: </span>
                     <label>Tipo</label>
                     <select class="tipo-de-actividad">
                         <option value="">-- Seleccione --</option>
-                        <option value="deportiva">Deportiva</option>
-                        <option value="artistica">Artística</option>
-                        <option value="tecnologica">Tecnológica</option>
-                        <option value="social">Social</option>
-                        <option value="recreativa">Recreativa</option>
-                        <option value="otro">Otro</option>
+                        <option value="Deportiva">Deportiva</option>
+                        <option value="Artística">Artística</option>
+                        <option value="Tecnológica">Tecnológica</option>
+                        <option value="Social">Social</option>
+                        <option value="Recreativa">Recreativa</option>
+                        <option value="Otro">Otro</option>
                     </select>
                 </div>
                 <div class="query-order">
@@ -52,7 +52,21 @@
                         <option value="<">Menor a mayor</option>
                     </select>
                 </div>
+                <button type="submit" class="button visible">
+                    Buscar
+                </button>
             </form>
+            <div class="table-container">
+                <table id="members-query">
+                    <tr class="table-head">
+                        <th> Nombre </th>
+                        <th> Email </th>
+                        <th> Actividad </th>
+                        <th> Tipo </th>
+                    </tr>
+                </table>
+            </div>
         </div>
+        <script lang="javascript" src="../js/miembros.js"></script>
     </body>
 </html>
