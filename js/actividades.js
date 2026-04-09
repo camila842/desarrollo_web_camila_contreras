@@ -2,30 +2,32 @@
 let activitiesRegisterCounter = 0;
 
 const activateTimeInput = () => {
-    //const weekDays = ["monday","tuesday","wednesday","thursday","friday","saturday","sunday"];
-    for (let day of document.getElementsByName("week-day")){
-        day.addEventListener("change",(event) => {
-            addTime(event.target.value,event.target.checked);
+    for (let day of document.getElementsByName("week-day")) {
+        day.addEventListener("change", (event) => {
+            addTime(event.target.value, event.target.checked);
+            checkDias();
         });
     }
 };
 
-const addTime = (inputValue,checked) => {
-
+const addTime = (inputValue, checked) => {
     let dayDiv = document.getElementById(`${inputValue}-div`);
-    if (checked){
+    if (checked) {
         let timeInput = dayDiv.getElementsByClassName("time-selector")[0];
-        if (timeInput){
+        if (timeInput) {
             timeInput.className = "time-selector visible";
-        }
-        else{
+            attachTimeListeners(timeInput);
+        } else {
             timeInput = document.getElementsByClassName("time-selector")[0];
             let newTime = timeInput.cloneNode(true);
             newTime.className = "time-selector visible";
+            for (let input of newTime.querySelectorAll("input[type='time']")) {
+                input.value = "";
+            }
             dayDiv.appendChild(newTime);
+            attachTimeListeners(newTime);
         }
-    }
-    else{
+    } else {
         let timeInput = dayDiv.getElementsByClassName("time-selector visible")[0];
         if (timeInput) {
             timeInput.className = "time-selector";
@@ -33,9 +35,56 @@ const addTime = (inputValue,checked) => {
     }
 };
 
+const attachTimeListeners = (timeSelector) => {
+    for (let input of timeSelector.querySelectorAll("input[type='time']")) {
+        input.addEventListener("change", checkHoras);
+    }
+};
+
+const checkNombre = () => {
+    const nombre = document.getElementById("activity-name").value;
+    const valido = nombre && nombre.length >= 3;
+    document.getElementById("error-name").className = valido ? "error" : "error visible";
+};
+
+const checkTipo = () => {
+    const tipo = document.getElementById("tipo-de-actividad").value;
+    const valido = tipo !== "";
+    document.getElementById("error-tipo").className = valido ? "error" : "error visible";
+};
+
+const checkDias = () => {
+    const weekDaysInputs = document.getElementsByName("week-day");
+    let anyChecked = false;
+    for (let input of weekDaysInputs) {
+        if (input.checked) { anyChecked = true; break; }
+    }
+    document.getElementById("error-dias").className = anyChecked ? "error" : "error visible";
+    checkHoras();
+};
+
+const checkHoras = () => {
+    const validadorHoras = (hora) => hora !== "";
+    const weekDays   = document.getElementsByClassName("day");
+    const weekDaysInputs = document.getElementsByName("week-day");
+    let timeChecker = true;
+    for (let i = 0; i < 7; i++) {
+        if (weekDaysInputs[i].checked) {
+            const begTime = weekDays[i].getElementsByClassName("from-time")[0];
+            const endTime = weekDays[i].getElementsByClassName("until-time")[0];
+            if (!validadorHoras(begTime.value) || !validadorHoras(endTime.value)) {
+                timeChecker = false;
+                break;
+            }
+        }
+    }
+    document.getElementById("error-horas").className = timeChecker ? "error" : "error visible";
+};
+
+// --- Add activity button ---
 const addActivity = (event) => {
     event.preventDefault();
-    if (activitiesRegisterCounter == 0){
+    if (activitiesRegisterCounter == 0) {
         let activityForm = document.getElementsByClassName("activities-register")[0];
         activityForm.className = "activities-register visible";
         activitiesRegisterCounter += 1;
@@ -48,8 +97,8 @@ const addActivity = (event) => {
     }
 };
 
-const validateActivity = (event) =>{
-    event.preventDefault(); 
+const validateActivity = (event) => {
+    event.preventDefault();
 
     const validadorNombre = (nombre) => {
         return nombre && nombre.length >= 3;
@@ -61,22 +110,22 @@ const validateActivity = (event) =>{
 
     const validateOneDay = () => {
         const validadorHoras = (hora) => {
-            return hora == "";
+            return hora !== "";
         };
         const activity = document.getElementsByClassName("activity-container")[0];
         const weekDays = activity.getElementsByClassName("day");
-        const weekDaysInputs = activity.getElementsByName("week-day");
+        const weekDaysInputs = document.getElementsByName("week-day");
         let dayChecker = false;
         let timeChecker = true;
-        for (let i=0; i<7; i++){
+        for (let i = 0; i < 7; i++) {
             let dayInput = weekDaysInputs[i];
-            if (dayInput.checked){
+            if (dayInput.checked) {
                 dayChecker = true;
-                
-                let begTime = weekDays[i].getElementsByClassName("from-time")[0];
-                let endTime = weekDays[i].getElementsByClassName("from-time")[0];
 
-                if (!validadorHoras(begTime.value) || !validadorHoras(endTime.value)){
+                let begTime = weekDays[i].getElementsByClassName("from-time")[0];
+                let endTime = weekDays[i].getElementsByClassName("until-time")[0];
+
+                if (!validadorHoras(begTime.value) || !validadorHoras(endTime.value)) {
                     timeChecker = false;
                 }
             }
@@ -84,25 +133,25 @@ const validateActivity = (event) =>{
         return dayChecker && timeChecker;
     };
 
-    const addActivityToList = (nombre,tipo,dias,horaInicios,horaTerminos) => {
+    const addActivityToList = (nombre, tipo, dias) => {
         const newNode = document.createElement("div");
         newNode.className = "actividad-item";
         const newName = document.createElement("span");
         newName.className = "nombre";
-        newName.textContent = nombre ;
+        newName.textContent = nombre;
 
         const newType = document.createElement("span");
         newType.className = "tipo";
         newType.textContent = tipo;
-        
+
         newNode.appendChild(newName);
         newNode.appendChild(newType);
-        for (let i=0; i<7; i++){
-            const inputDia = dias[i].getElementsByName("week-day")[0];
-            if (inputDia.checked){
+        for (let i = 0; i < 7; i++) {
+            const inputDia = dias[i].querySelector("[name='week-day']");
+            if (inputDia.checked) {
                 const newDay = document.createElement("span");
                 newDay.className = "day-of-activity";
-                newDay.textContent = `${inputDia.value}: ` ;
+                newDay.textContent = `${inputDia.value}: `;
 
                 const begTime = dias[i].getElementsByClassName("from-time")[0];
                 const newBegHour = document.createElement("span");
@@ -111,7 +160,7 @@ const validateActivity = (event) =>{
                 const endTime = dias[i].getElementsByClassName("until-time")[0];
                 const newEndHour = document.createElement("span");
                 newEndHour.textContent = `Hora término: ${endTime.value}`;
-                
+
                 newNode.appendChild(newDay);
                 newNode.appendChild(newBegHour);
                 newNode.appendChild(newEndHour);
@@ -120,58 +169,52 @@ const validateActivity = (event) =>{
         let activityDiv = document.getElementById("form-results");
         activityDiv.appendChild(newNode);
     };
+
     let nombreActividad = document.getElementById("activity-name");
-    let tipoActividad = document.getElementById("tipo-de-actividad");
-    let inicioActividad = document.getElementsByClassName("from-time");
-    let terminoActividad = document.getElementsByClassName("until-time");
-
+    let tipoActividad   = document.getElementById("tipo-de-actividad");
     let errorNombre = document.getElementById("error-name");
-    let errorTipo = document.getElementById("error-tipo");
-    let errorHoras = document.getElementById("error-horas");
-    let errorDias = document.getElementById("error-dias");
+    let errorTipo   = document.getElementById("error-tipo");
+    let errorHoras  = document.getElementById("error-horas");
+    let errorDias   = document.getElementById("error-dias");
 
-    let valNom = validadorNombre(nombreActividad.value);
-    let valTip = validadorTipo(tipoActividad.value);
-    let valHorIni = validadorHoras(inicioActividad);
-    let valHorTer = validadorHoras(terminoActividad);
+    let valNom  = validadorNombre(nombreActividad.value);
+    let valTip  = validadorTipo(tipoActividad.value);
     let valDias = validateOneDay();
 
-    if (!valNom) {
-        errorNombre.className = "error visible";
-    } else {
-        errorNombre.className = "error";
-    }
+    errorNombre.className = valNom  ? "error" : "error visible";
+    errorTipo.className   = valTip  ? "error" : "error visible";
+    errorDias.className   = valDias ? "error" : "error visible";
+    errorHoras.className  = valDias ? "error" : "error visible";
 
-    if (!valTip) {
-        errorTipo.className = "error visible";
-    } else {
-        errorTipo.className = "error";
-    }
-
-    if (!valHorIni || !valHorTer) {
-        errorHoras.className = "error visible";
-    } else {
-        errorHoras.className = "error";
-    }
-
-    if (!valDias) {
-        errorDias.className = "error visible";
-    } else {
-        errorDias.className = "error";
-    }
-
-    if(valHorIni && valHorTer && valNom && valTip && valDias){
+    if (valNom && valTip && valDias) {
         const weekDays = document.getElementsByClassName("day");
-        addActivityToList(nombreActividad.value,tipoActividad.value,weekDays,inicioActividad,terminoActividad);
+        addActivityToList(nombreActividad.value, tipoActividad.value, weekDays);
+        resetForm();
     }
-
 };
 
+const resetForm = () => {
+    document.getElementById("activities-register").reset();
+
+    // ocultar todos los time-selectors
+    for (let timeSelector of document.getElementsByClassName("time-selector visible")) {
+        timeSelector.className = "time-selector";
+    }
+
+    // limpiar errores
+    for (let error of document.getElementsByClassName("error visible")) {
+        error.className = "error";
+    }
+};
+
+// --- Event listeners ---
 const addActBtn = document.getElementById("add-activity");
-addActBtn.addEventListener("click",addActivity);
+addActBtn.addEventListener("click", addActivity);
 
-
-activateTimeInput();
+document.getElementById("activity-name").addEventListener("input", checkNombre);
+document.getElementById("tipo-de-actividad").addEventListener("change", checkTipo);
 
 const filledForm = document.getElementById("activities-register");
-filledForm.addEventListener("submit",validateActivity);
+filledForm.addEventListener("submit", validateActivity);
+
+activateTimeInput();

@@ -38,3 +38,7 @@
 .error.visible {
     display: block;
 }
+.actividad-item span {
+    display: block;
+    margin-bottom: 5px;
+}
