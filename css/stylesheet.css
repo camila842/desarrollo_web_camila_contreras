@@ -1,3 +1,9 @@
+.encabezado{
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
 .activities-register { 
     font-size: 0.85em; display: none; 
 }
