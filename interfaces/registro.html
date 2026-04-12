@@ -29,26 +29,52 @@
             <form class="formulario" id="sign-up-form">
                 <div class="sign-up-input" id="name-input">
                     <label> Nombre </label>
-                    <input id="name" name="name" type="text" required>
+                    <input id="name" class="name" type="text" >
+                    <span class="error" id="error-name">El nombre debe tener al menos 3 caracteres.</span>
                 </div>
                 <div class="sign-up-input" id="surname-input">
                     <label> Apellido </label>
-                    <input id="surname" name="surname" type="text" required>
+                    <input id="surname" class="surname" type="text" >
+                    <span class="error" id="error-surname">El apellido debe tener al menos 3 caracteres.</span>
+                </div>
+                <div class="sign-up-input">
+                    <p>Rol en la Facultad:</p>
+                    <select id="role-input">
+                        <option value="">--Seleccione--</option>
+                        <option value="Estudiante Pre Grado">Estudiante Pre Grado</option>
+                        <option value="Estudiante Post Grado">Estudiante Post Grado</option>
+                        <option value="Funcionario">Funcionario</option>
+                        <option value="Funcionario">Académico</option>
+                    </select>
+                    <span class="error" id="error-role">Seleccione 1 rol.</span>
                 </div>
                 <div class="sign-up-input" id="email-input">
                     <label> Correo Electrónico </label>
-                    <input id="email" name="email" type="email" required>
+                    <input id="email" class="email" type="email" >
+                    <span class="error" id="error-email">Email inválido.</span>
                 </div>
                 <div class="sign-up-input" id="password-input">
                     <label> Contraseña </label>
-                    <input id="password" name="password" type="password" required>
+                    <input id="password" class="password" type="password" >
+                    <span class="error" id="error-password-length">
+                        Contraseña debe tener un largo de al menos 8 caracteres.
+                    </span>
+                    <span class="error" id="error-password-caracter">
+                        Contraseña debe tener al menos un caracter especial: "@, ¿, ? , {, } , .".
+                    </span>
                 </div>
-                <div class="button" id="register-button">
-                    <button type="submit" id="forms-submit">
-                        Registrarse
-                    </button>
-                </div>
+                
+                <button type="submit" class="button visible" id="forms-submit">
+                    Registrarse
+                </button>
+                <span class="error" id="not-error-mesage">
+                    ¡Felicidades! Tu cuenta ha sido registrada exitosamente.
+                </span>
             </form>
+            <span class="error" id="not-error-mesage">
+                ¡Felicidades! Tu cuenta ha sido registrada exitosamente.
+            </span>
         </div>
+        <script lang="javascript" src="../js/registro.js"></script>
     </body>
 </html>
