@@ -81,7 +81,27 @@ const checkHoras = () => {
     document.getElementById("error-horas").className = timeChecker ? "error" : "error visible";
 };
 
-// --- Add activity button ---
+const checkFile = () => {
+    const files = document.getElementById("file-input").files;
+    let valido = true;
+    if (files.length != 0){
+        
+        const validTypes = ["png","jpg","jpeg","mp4"];
+        for (let file of files){
+            const splittedName = file.name.split(".");
+            const type = splittedName[splittedName.length - 1];
+            valido = valido && validTypes.includes(type);
+        }
+        document.getElementById("error-file-type").className = valido ? "error" : "error visible";
+        document.getElementById("error-file").className = "error";
+    }
+    else{
+        document.getElementById("error-file").className = "error visible";
+        valido = false;
+    }
+    return valido;
+};
+
 const addActivity = (event) => {
     event.preventDefault();
     if (activitiesRegisterCounter == 0) {
@@ -180,13 +200,14 @@ const validateActivity = (event) => {
     let valNom  = validadorNombre(nombreActividad.value);
     let valTip  = validadorTipo(tipoActividad.value);
     let valDias = validateOneDay();
+    let valFile = checkFile();
 
     errorNombre.className = valNom  ? "error" : "error visible";
     errorTipo.className   = valTip  ? "error" : "error visible";
     errorDias.className   = valDias ? "error" : "error visible";
     errorHoras.className  = valDias ? "error" : "error visible";
 
-    if (valNom && valTip && valDias) {
+    if (valNom && valTip && valDias && valFile) {
         const weekDays = document.getElementsByClassName("day");
         addActivityToList(nombreActividad.value, tipoActividad.value, weekDays);
         resetForm();
@@ -207,12 +228,12 @@ const resetForm = () => {
     }
 };
 
-// --- Event listeners ---
 const addActBtn = document.getElementById("add-activity");
 addActBtn.addEventListener("click", addActivity);
 
 document.getElementById("activity-name").addEventListener("input", checkNombre);
 document.getElementById("tipo-de-actividad").addEventListener("change", checkTipo);
+document.getElementById("file-input").addEventListener("change",checkFile);
 
 const filledForm = document.getElementById("activities-register");
 filledForm.addEventListener("submit", validateActivity);

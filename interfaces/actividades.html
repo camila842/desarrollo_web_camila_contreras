@@ -87,6 +87,16 @@
                         </select>
                         <span class="error" id="error-tipo">Debes elegir el tipo de actividad.</span>
                     </div>
+                    <div class="file-input" id="file-input-div" multiple>
+                        <label>Imágenes de la actividad (puede ser video o fotografías)</label>
+                        <input type="file" id="file-input">
+                        <span class="error" id="error-file">Debes ingresar al menos un archivo.</span>
+                        <span class="error" id="error-file-type">Solo se soportan archivos .png, .jpg, .jpeg, .</span>
+                    </div>
+                    <div class="url-div" id="url-div">
+                       <label> Link con más información al respecto </label> 
+                       <input type="url" id="input-url">
+                    </div>
                 </div>
                 <button type="submit"  id="submit-activity" class="button">
                     Inscribir Actividad
