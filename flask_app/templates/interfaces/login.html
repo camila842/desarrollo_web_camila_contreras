@@ -1,0 +1,31 @@
+{% extends "interfaces/encabezado.html" %}
+
+{% block title %}Iniciar Sesión{% endblock %}
+
+{% block content %}
+        <div class="container">
+            <form class="formulario" id="login-form" action="{{ url_for('login') }}" method="POST">
+
+                <div class="sign-up-input" id="email-input">
+                    <label> Correo Electrónico </label>
+                    <input id="email" name="email" class="email" type="email">
+                    <span class="error" id="error-email">Email inválido.</span>
+                </div>
+
+                <div class="sign-up-input" id="password-input">
+                    <label> Contraseña </label>
+                    <input id="contrasenna" name="contrasenna" class="password" type="password">
+                    <span class="error" id="error-password">Ingrese su contraseña.</span>
+                </div>
+
+                <button type="submit" class="button visible" id="forms-submit">
+                    Iniciar Sesión
+                </button>
+
+                {% if error %}
+                <span class="error visible" id="server-error">{{ error }}</span>
+                {% endif %}
+
+            </form>
+        </div>
+{% endblock %}

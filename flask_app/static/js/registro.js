@@ -35,7 +35,7 @@ const checkEmail = () => {
     };
     const email = document.getElementById("email").value;
     let valido = false;
-    if(email){    
+    if(email){
         const emailParts = email.split("@");
         if (emailParts.length == 2){
             valido = checkAddressName(emailParts[0]) && checkAddressDomain(emailParts[1]);
@@ -47,7 +47,47 @@ const checkEmail = () => {
     document.getElementById("error-email").className = valido ? "error" : "error visible";
     return valido;
 };
-const checkPassword = () => { 
+const checkRegion = () => {
+    const region = document.getElementById("region-select").value;
+    const valido = region !== "";
+    document.getElementById("error-region").className = valido ? "error" : "error visible";
+    return valido;
+};
+const checkComuna = () => {
+    const comuna = document.getElementById("comuna-select").value;
+    const valido = comuna !== "";
+    document.getElementById("error-comuna").className = valido ? "error" : "error visible";
+    return valido;
+};
+const populateComunas = () => {
+    const regionId = parseInt(document.getElementById("region-select").value);
+    const comunaSelect = document.getElementById("comuna-select");
+
+    comunaSelect.innerHTML = "";
+
+    if (!regionId) {
+        comunaSelect.disabled = true;
+        comunaSelect.innerHTML = '<option value="">--Seleccione región primero--</option>';
+        return;
+    }
+
+    const regionData = COMUNAS_POR_REGION.find(r => r.id === regionId);
+    comunaSelect.disabled = false;
+    comunaSelect.innerHTML = '<option value="">--Seleccione--</option>';
+
+    if (regionData) {
+        regionData.comunas.forEach(c => {
+            const opt = document.createElement("option");
+            opt.value = c.id;
+            opt.textContent = c.nombre;
+            comunaSelect.appendChild(opt);
+        });
+    }
+
+    checkRegion();
+    checkComuna();
+};
+const checkPassword = () => {
     const checkSpecial = (password) => {
         let contains = false;
         const specialCaracters = ["@","¿","?","{","}", "."];
@@ -65,29 +105,17 @@ const checkPassword = () => {
 };
 
 const formValidator = (event) => {
-    event.preventDefault();
-    const valido = checkNombre() && checkApellido() && checkEmail() && checkRole() && checkPassword();
-    document.getElementById("not-error-mesage").className = valido ? "error visible" : "error";
-    if(valido){
-        document.getElementById("sign-up-form").reset();
+    const valido = checkNombre() && checkApellido() && checkEmail() && checkRole() && checkRegion() && checkComuna() && checkPassword();
+    if (!valido) {
+        event.preventDefault();
     }
 };
 
-const nameInput = document.getElementById("name");
-nameInput.addEventListener("input",checkNombre);
-
-const surnameInput = document.getElementById("surname");
-surnameInput.addEventListener("input",checkApellido);
-
-const roleInput = document.getElementById("role-input");
-roleInput.addEventListener("change",checkRole);
-
-const emailInput = document.getElementById("email");
-emailInput.addEventListener("input",checkEmail);
-
-const passwordInput = document.getElementById("password");
-passwordInput.addEventListener("input",checkPassword);
-
-const registration = document.getElementById("sign-up-form");
-registration.addEventListener("submit",formValidator);
-
+document.getElementById("name").addEventListener("input", checkNombre);
+document.getElementById("surname").addEventListener("input", checkApellido);
+document.getElementById("role-input").addEventListener("change", checkRole);
+document.getElementById("region-select").addEventListener("change", populateComunas);
+document.getElementById("comuna-select").addEventListener("change", checkComuna);
+document.getElementById("email").addEventListener("input", checkEmail);
+document.getElementById("password").addEventListener("input", checkPassword);
+document.getElementById("sign-up-form").addEventListener("submit", formValidator);

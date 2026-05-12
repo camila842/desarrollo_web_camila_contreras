@@ -1,58 +1,67 @@
-<!DOCTYPE html>
-<html lang="es">
-    <head>
-        <meta charset="utf-8">
-        <title> Registro </title>
-        <link rel="stylesheet" href="../css/stylesheet.css">
-    </head>
-    <body>
-        <div class="encabezado">
-            <div class="left-side">
-                <h3>Extra-Curricular DCC</h3>
-            </div>
-            <div class="right-side">
-                <a href="../interfaces/registro.html">
-                    <button class="section-linker" value="registro">Registro</button>
-                </a>
-                <a href="../interfaces/actividades.html">
-                    <button class="section-linker" value="actividades">Actividades</button>
-                </a>
-                <a href="../interfaces/Miembros.html">
-                    <button class="section-linker" value="miembros">Miembros</button>
-                </a>
-            </div>
-        </div>
+{% extends "interfaces/encabezado.html" %}
+
+{% block title %}Registro{% endblock %}
+
+{% block content %}
         <div class="container">
-            <form class="formulario" id="sign-up-form">
+            <form class="formulario" id="sign-up-form" action="{{ url_for('register') }}" method="POST">
+
                 <div class="sign-up-input" id="name-input">
                     <label> Nombre </label>
-                    <input id="name" class="name" type="text" >
+                    <input id="name" name="name" class="name" type="text">
                     <span class="error" id="error-name">El nombre debe tener al menos 3 caracteres.</span>
                 </div>
+
                 <div class="sign-up-input" id="surname-input">
                     <label> Apellido </label>
-                    <input id="surname" class="surname" type="text" >
+                    <input id="surname" name="surname" class="surname" type="text">
                     <span class="error" id="error-surname">El apellido debe tener al menos 3 caracteres.</span>
                 </div>
+
                 <div class="sign-up-input">
                     <p>Rol en la Facultad:</p>
-                    <select id="role-input">
+                    <select id="role-input" name="role">
                         <option value="">--Seleccione--</option>
                         <option value="Estudiante Pre Grado">Estudiante Pre Grado</option>
                         <option value="Estudiante Post Grado">Estudiante Post Grado</option>
                         <option value="Funcionario">Funcionario</option>
-                        <option value="Funcionario">Académico</option>
+                        <option value="Académico">Académico</option>
                     </select>
                     <span class="error" id="error-role">Seleccione 1 rol.</span>
                 </div>
+
                 <div class="sign-up-input" id="email-input">
                     <label> Correo Electrónico </label>
-                    <input id="email" class="email" type="email" >
+                    <input id="email" name="email" class="email" type="email">
                     <span class="error" id="error-email">Email inválido.</span>
                 </div>
+
+                <div class="sign-up-input" id="region-input">
+                    <p>Región:</p>
+                    <select id="region-select">
+                        <option value="">--Seleccione--</option>
+                        {% for region in comunas %}
+                        <option value="{{ region.id }}">{{ region.nombre }}</option>
+                        {% endfor %}
+                    </select>
+                    <span class="error" id="error-region">Seleccione una región.</span>
+                </div>
+
+                <div class="sign-up-input" id="comuna-input">
+                    <p>Comuna:</p>
+                    <select id="comuna-select" name="comuna_id" disabled>
+                        <option value="">--Seleccione región primero--</option>
+                    </select>
+                    <span class="error" id="error-comuna">Seleccione una comuna.</span>
+                </div>
+
+                <script>
+                    const COMUNAS_POR_REGION = {{ comunas | tojson }};
+                </script>
+
                 <div class="sign-up-input" id="password-input">
                     <label> Contraseña </label>
-                    <input id="password" class="password" type="password" >
+                    <input id="password" name="password" class="password" type="password">
                     <span class="error" id="error-password-length">
                         Contraseña debe tener un largo de al menos 8 caracteres.
                     </span>
@@ -60,18 +69,21 @@
                         Contraseña debe tener al menos un caracter especial: "@, ¿, ? , {, } , .".
                     </span>
                 </div>
-                
+
                 <button type="submit" class="button visible" id="forms-submit">
                     Registrarse
                 </button>
+
+                {% for msg in get_flashed_messages() %}
+                <span class="error visible" id="server-error">{{ msg }}</span>
+                {% endfor %}
+
                 <span class="error" id="not-error-mesage">
                     ¡Felicidades! Tu cuenta ha sido registrada exitosamente.
                 </span>
+
             </form>
-            <span class="error" id="not-error-mesage">
-                ¡Felicidades! Tu cuenta ha sido registrada exitosamente.
-            </span>
         </div>
-        <script lang="javascript" src="../js/registro.js"></script>
-    </body>
-</html>
+
+        <script src="{{ url_for('static', filename='js/registro.js') }}"></script>
+{% endblock %}

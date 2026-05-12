@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
     <head>
         <meta charset="utf-8">
-        <title> Extra-Curricular DCC </title>
-        <link rel="stylesheet" href="../css/stylesheet.css">
+        <title>{% block title %}Extra-Curricular DCC{% endblock %}</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/stylesheet.css') }}">
     </head>
     <body>
         <div class="encabezado">
@@ -11,16 +11,21 @@
                 <h3>Extra-Curricular DCC</h3>
             </div>
             <div class="right-side">
-                <a href="../interfaces/registro.html">
+                <a href="{{ url_for('register') }}">
                     <button class="section-linker" value="registro">Registro</button>
                 </a>
-                <a href="../interfaces/actividades.html">
+                <a href="{{ url_for('login') }}">
+                    <button class="section-linker" value="login">Iniciar Sesión</button>
+                </a>
+                <a href="{{ url_for('register_activity') }}">
                     <button class="section-linker" value="actividades">Actividades</button>
                 </a>
-                <a href="../interfaces/Miembros.html">
+                <a href="/miembros">
                     <button class="section-linker" value="miembros">Miembros</button>
                 </a>
             </div>
         </div>
+
+        {% block content %}{% endblock %}
     </body>
 </html>

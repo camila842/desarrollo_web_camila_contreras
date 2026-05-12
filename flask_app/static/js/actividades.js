@@ -118,7 +118,6 @@ const addActivity = (event) => {
 };
 
 const validateActivity = (event) => {
-    event.preventDefault();
 
     const validadorNombre = (nombre) => {
         return nombre && nombre.length >= 3;
@@ -207,10 +206,8 @@ const validateActivity = (event) => {
     errorDias.className   = valDias ? "error" : "error visible";
     errorHoras.className  = valDias ? "error" : "error visible";
 
-    if (valNom && valTip && valDias && valFile) {
-        const weekDays = document.getElementsByClassName("day");
-        addActivityToList(nombreActividad.value, tipoActividad.value, weekDays);
-        resetForm();
+    if (!(valNom && valTip && valDias && valFile)) {
+        event.preventDefault();
     }
 };
 

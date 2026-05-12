@@ -1,32 +1,13 @@
-<!DOCTYPE html>
-<html lang="es">
-    <head>
-        <meta charset="utf-8">
-        <title> Registro Actividades </title>
-        <link rel="stylesheet" href="../css/stylesheet.css">
-    </head>
-    <body>
-        <div class="encabezado">
-            <div class="left-side">
-                <h3>Extra-Curricular DCC</h3>
-            </div>
-            <div class="right-side">
-                <a href="../interfaces/registro.html">
-                    <button class="section-linker" value="registro">Registro</button>
-                </a>
-                <a href="../interfaces/actividades.html">
-                    <button class="section-linker" value="actividades">Actividades</button>
-                </a>
-                <a href="../interfaces/Miembros.html">
-                    <button class="section-linker" value="miembros">Miembros</button>
-                </a>
-            </div>
-        </div>
+{% extends "interfaces/encabezado.html" %}
+
+{% block title %}Actividades{% endblock %}
+
+{% block content %}
         <div class="container" id="form-container">
             <button type="button" id="add-activity" class="button visible">
                 Añadir Actividad
             </button>
-            <form class="activities-register" id="activities-register">
+            <form class="activities-register" id="activities-register" action="{{ url_for('register_activity') }}" method="POST" enctype="multipart/form-data">
                 <div class="activity-container" id="act-1">
                     <div class="name-input">
                         <label> Nombre actividad </label>
@@ -35,8 +16,8 @@
                     </div>
                     <div class="day-selector" >
                         <legend> Días de la actividad </legend>
-                        <div class="day" id="monday-div">
-                            <input type="checkbox" id="day-monday" name="week-day" value="monday">
+                        <div class="day" id="lunes-div">
+                            <input type="checkbox" id="day-monday" name="week-day" value="lunes">
                             <label for="day-monday"> Lunes </label>
                             <div class="time-selector">
                                 <label> Desde: </label>
@@ -47,28 +28,28 @@
 
                             </div>
                         </div>
-                        <div class="day" id="tuesday-div">
-                            <input type="checkbox" id="day-tuesday" name="week-day" value="tuesday">
+                        <div class="day" id="martes-div">
+                            <input type="checkbox" id="day-tuesday" name="week-day" value="martes">
                             <label for="day-tuesday"> Martes </label>
                         </div>
-                        <div class="day" id="wednesday-div">
-                            <input type="checkbox" id="day-wednesday" name="week-day" value="wednesday">
+                        <div class="day" id="miércoles-div">
+                            <input type="checkbox" id="day-wednesday" name="week-day" value="miércoles">
                             <label for="day-wednesday"> Miércoles </label>
                         </div>
-                        <div class="day" id="thursday-div">
-                            <input type="checkbox" id="day-thursday" name="week-day" value="thursday">
+                        <div class="day" id="jueves-div">
+                            <input type="checkbox" id="day-thursday" name="week-day" value="jueves">
                             <label for="day-thursday"> Jueves </label>
                         </div>
-                        <div class="day" id="friday-div">
-                            <input type="checkbox" id="day-friday" name="week-day" value="friday">
+                        <div class="day" id="viernes-div">
+                            <input type="checkbox" id="day-friday" name="week-day" value="viernes">
                             <label for="day-friday"> Viernes </label>
                         </div>
-                        <div class="day" id="saturday-div">
-                            <input type="checkbox" id="day-saturday" name="week-day" value="saturday">
+                        <div class="day" id="sábado-div">
+                            <input type="checkbox" id="day-saturday" name="week-day" value="sábado">
                             <label for="day-saturday"> Sábado </label>
                         </div>
-                        <div class="day" id="sunday-div">
-                            <input type="checkbox" id="day-sunday" name="week-day" value="sunday">
+                        <div class="day" id="domingo-div">
+                            <input type="checkbox" id="day-sunday" name="week-day" value="domingo">
                             <label for="day-sunday"> Domingo </label>
                         </div>
                         <span class="error" id="error-horas">Debe haber hora de inicio y término.</span>
@@ -76,7 +57,7 @@
                     </div>
                     <div class="type-selector">
                         <label>Tipo de Actividad</label>
-                        <select id="tipo-de-actividad" class="tipo-de-actividad">
+                        <select id="tipo-de-actividad" class="tipo-de-actividad" name="tipo">
                             <option value="">-- Seleccione --</option>
                             <option value="deportiva">Deportiva</option>
                             <option value="artistica">Artística</option>
@@ -89,7 +70,7 @@
                     </div>
                     <div class="file-input" id="file-input-div" multiple>
                         <label>Imágenes de la actividad (puede ser video o fotografías)</label>
-                        <input type="file" id="file-input">
+                        <input type="file" id="file-input" name="file-input">
                         <span class="error" id="error-file">Debes ingresar al menos un archivo.</span>
                         <span class="error" id="error-file-type">Solo se soportan archivos .png, .jpg, .jpeg, .</span>
                     </div>
@@ -101,10 +82,13 @@
                 <button type="submit"  id="submit-activity" class="button">
                     Inscribir Actividad
                 </button>
+
+                {% for msg in get_flashed_messages() %}
+                <span class="error visible">{{ msg }}</span>
+                {% endfor %}
             </form>
             
         </div>
         <div id="form-results"></div>
-        <script lang="javascript" src="../js/actividades.js"></script>
-    </body>
-</html>
+        <script src="{{ url_for('static', filename='js/actividades.js') }}"></script>
+{% endblock %}
