@@ -6,7 +6,16 @@ Para ello se ha comenzado a implementar una aplicación web que permita entender
 
 ### Página de Bienvenida
 
-Dado que el proyecto se encuentra en las primeras fases de implementación, esta página no tiene más contenido que el encabezado que comparten las interfaces del proyecto. Sin embargo, como se mencionó previamente, la idea de esta página es que funcione a modo de introducción y/o resumen de la plataforma.
+La página de bienvenida muestra un mensaje introductorio de la aplicación **Extra-Curricular DCC**, indicando que el sistema permite gestionar miembros y actividades extracurriculares del Departamento de Ciencias de la Computación.
+
+Además, se incluye una tabla con los últimos 5 miembros agregados al sistema. Para cada registro se muestra la información principal disponible:
+
+- Nombre del miembro.
+- Email del miembro.
+- Actividad asociada.
+- Tipo de actividad.
+
+En los casos donde un miembro aún no tenga actividades registradas, los campos correspondientes a `Actividad` y `Tipo` pueden aparecer como `None`, ya que no existe una actividad asociada a ese miembro en la base de datos.
 
 ### Registro
 
@@ -41,3 +50,11 @@ Si y solo si se cumplen los puntos anteriores, el usuario podrá registrar una a
 La página para realizar *queries* sobre los miembros de la comunidad contiene un pequeño formulario que pregunta por los filtros que se querrán aplicar sobre los datos. Al presionar el botón de "Buscar", se puede enviar el formulario, el cual no cuenta con una validación, ya que los inputs están restringidos a valores predeterminados y, de no seleccionarse alguno de ellos, la búsqueda solo adquirirá un valor "*default*" y desplegará los resultados. Originalmente, se pensó la opción de ordenar por más de un atributo duplicando esa sección específica del formulario; sin embargo, por temas de tiempo no pudo ser aplicada. Por último, dada la falta de datos backend del proyecto, al presionar buscar solo aparecen unos valores en la tabla que fueron puestos a mano en el código.
 
 Dentro de esta sección, se adjuntó una forma de acceder a una página distinta que contendrá las gráficas de la información. En el futuro se considerará que estas puedan generarse en base a *queries default* a la base de datos, que podrán generarse por medio de formularios como el de filtros de la página de miembros, es decir, estableciendo opciones predeterminadas que en conjunto provean una *query* válida.
+
+### Nota sobre la base de datos
+
+Durante el desarrollo de esta entrega se detectaron inconsistencias entre el esquema original de la base de datos y los requerimientos implementados en la Tarea 1. Por esta razón, se realizaron modificaciones sobre algunas tablas para mantener coherencia entre el modelo de datos, los formularios y las funcionalidades solicitadas.
+
+Estas modificaciones ya fueron incorporadas en los scripts SQL entregados por el equipo docente, por lo que basta con ejecutar dichos scripts para obtener el esquema actualizado.
+
+En caso de querer aplicar únicamente las alteraciones realizadas sobre una base de datos ya existente, se debe revisar el archivo `tarea2.sql` y ejecutar las secciones que contienen sentencias `ALTER`.
