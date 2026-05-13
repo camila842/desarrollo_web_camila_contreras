@@ -40,16 +40,20 @@
                 <table id="members-query">
                     <tr class="table-head">
                         <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>Rol</th>
                         <th>Email</th>
-                        <th>Actividad</th>
-                        <th>Tipo</th>
                     </tr>
 
                     {% for miembro in miembros %}
-                        <tr>
+                        <tr
+                            onclick="window.location.href='{{ url_for('member_detail', member_id=miembro.id) }}'"
+                            style="cursor: pointer;"
+                        >
                             <td>{{ miembro.nombre }}</td>
+                            <td>{{ miembro.apellido or "" }}</td>
+                            <td>{{ miembro.rol or "" }}</td>
                             <td>{{ miembro.email }}</td>
-                            <td>{{ miembro.rol }}</td>
                         </tr>
                     {% endfor %}
                 </table>

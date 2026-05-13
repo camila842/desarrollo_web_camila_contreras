@@ -1,0 +1,44 @@
+{% extends "interfaces/encabezado.html" %}
+
+{% block title %}Detalle miembro{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Detalle del miembro</h1>
+
+    <div class="member-detail">
+        <p><strong>Nombre:</strong> {{ miembro.nombre }}</p>
+        <p><strong>Email:</strong> {{ miembro.email }}</p>
+    </div>
+
+    <h2>Actividades</h2>
+
+    <div class="table-container">
+        <table>
+            <tr class="table-head">
+                <th>Nombre</th>
+                <th>Tipo</th>
+                <th>Día</th>
+                <th>Hora inicio</th>
+                <th>Duración</th>
+                <th>Descripción</th>
+            </tr>
+
+            {% for actividad in actividades %}
+                <tr>
+                    <td>{{ actividad.nombre }}</td>
+                    <td>{{ actividad.tipo }}</td>
+                    <td>{{ actividad.dia }}</td>
+                    <td>{{ actividad.hora_inicio }}</td>
+                    <td>{{ actividad.duracion }}</td>
+                    <td>{{ actividad.descripcion }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <a href="{{ url_for('members') }}">
+        <button>Volver</button>
+    </a>
+</div>
+{% endblock %}

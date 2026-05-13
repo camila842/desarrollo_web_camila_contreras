@@ -250,3 +250,28 @@ def count_miembros():
 
     session.close()
     return total
+
+def get_miembro_by_id(member_id):
+    session = SessionLocal()
+
+    miembro = (
+        session.query(Miembro)
+        .filter(Miembro.id == member_id)
+        .first()
+    )
+
+    session.close()
+    return miembro
+
+def get_actividades_by_miembro_id(member_id):
+    session = SessionLocal()
+
+    actividades = (
+        session.query(Actividad)
+        .filter(Actividad.miembro_id == member_id)
+        .order_by(Actividad.dia.asc(), Actividad.hora_inicio.asc())
+        .all()
+    )
+
+    session.close()
+    return actividades

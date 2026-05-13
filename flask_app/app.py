@@ -200,3 +200,13 @@ def members():
             hay_siguiente=offset + por_pagina < total
         )
     
+@app.route("/members/<int:member_id>")
+def member_detail(member_id):
+    miembro = db.get_miembro_by_id(member_id)
+    actividades = db.get_actividades_by_miembro_id(member_id)
+
+    return render_template(
+        "interfaces/detalle_miembro.html",
+        miembro=miembro,
+        actividades=actividades
+    )
