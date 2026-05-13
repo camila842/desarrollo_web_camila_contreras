@@ -216,37 +216,57 @@ def login_user(email, password):
         return False, "Usuario o contraseña incorrectos."
     return True, a_user
 
-def get_miembros_paginados(limit, offset):
+def get_miembros_paginados(limit, offset, tipo="", orden_attr="", orden_dir=""):
     session = SessionLocal()
 
+    query = session.query(Miembro)
+
+    if tipo:
+        query = (
+            query
+            .join(Actividad, Actividad.miembro_id == Miembro.id)
+            .filter(Actividad.tipo == tipo)
+            .distinct()
+        )
+
+    columnas_ordenables = {
+        "nombre": Miembro.nombre,
+        "email": Miembro.email,
+        "fecha_registro": Miembro.fecha_registro,
+    }
+
+    columna = columnas_ordenables.get(orden_attr, Miembro.id)
+
+    if orden_dir == "desc":
+        query = query.order_by(columna.desc())
+    else:
+        query = query.order_by(columna.asc())
+
     miembros = (
-        session.query(Miembro)
-        .order_by(Miembro.id.asc())
+        query
         .limit(limit)
         .offset(offset)
         .all()
     )
 
-    # resultado = []
-
-    # for miembro in miembros:
-    #     resultado.append({
-    #         "nombre": miembro.nombre,
-    #         "apellido":miembro.apellido,
-    #         "rol":miembro.rol,
-    #         "email": miembro.email,
-    #         "region": miembro.comuna_id            
-    #     })
-
     session.close()
-    # return resultado
     return miembros
 
 
-def count_miembros():
+def count_miembros(tipo=""):
     session = SessionLocal()
 
-    total = session.query(Miembro).count()
+    query = session.query(Miembro)
+
+    if tipo:
+        query = (
+            query
+            .join(Actividad, Actividad.miembro_id == Miembro.id)
+            .filter(Actividad.tipo == tipo)
+            .distinct()
+        )
+
+    total = query.count()
 
     session.close()
     return total
@@ -263,15 +283,32 @@ def get_miembro_by_id(member_id):
     session.close()
     return miembro
 
-def get_actividades_by_miembro_id(member_id):
+def get_actividades_by_miembro_id(member_id, tipo="", orden_attr="", orden_dir=""):
     session = SessionLocal()
 
-    actividades = (
-        session.query(Actividad)
-        .filter(Actividad.miembro_id == member_id)
-        .order_by(Actividad.dia.asc(), Actividad.hora_inicio.asc())
-        .all()
+    query = session.query(Actividad).filter(
+        Actividad.miembro_id == member_id
     )
+
+    if tipo:
+        query = query.filter(Actividad.tipo == tipo)
+
+    columnas_ordenables = {
+        "nombre": Actividad.nombre,
+        "tipo": Actividad.tipo,
+        "dia": Actividad.dia,
+        "hora_inicio": Actividad.hora_inicio,
+        "duracion": Actividad.duracion,
+    }
+
+    columna = columnas_ordenables.get(orden_attr, Actividad.id)
+
+    if orden_dir == "desc":
+        query = query.order_by(columna.desc())
+    else:
+        query = query.order_by(columna.asc())
+
+    actividades = query.all()
 
     session.close()
     return actividades

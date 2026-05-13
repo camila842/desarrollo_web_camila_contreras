@@ -12,6 +12,80 @@
     </div>
 
     <h2>Actividades</h2>
+    <form id="activities-query-form" method="GET" action="{{ url_for('member_detail', member_id=miembro.id) }}">
+        <div class="query-filters">
+            <span>Filtrar actividades por:</span>
+
+            <label>Tipo</label>
+            <select name="tipo" class="tipo-de-actividad">
+                <option value="">-- Seleccione --</option>
+
+                <option value="deportiva" {% if tipo == "deportiva" %}selected{% endif %}>
+                    Deportiva
+                </option>
+
+                <option value="artistica" {% if tipo == "artistica" %}selected{% endif %}>
+                    Artística
+                </option>
+
+                <option value="tecnologica" {% if tipo == "tecnologica" %}selected{% endif %}>
+                    Tecnológica
+                </option>
+
+                <option value="social" {% if tipo == "social" %}selected{% endif %}>
+                    Social
+                </option>
+
+                <option value="recreativa" {% if tipo == "recreativa" %}selected{% endif %}>
+                    Recreativa
+                </option>
+
+                <option value="otra" {% if tipo == "otra" %}selected{% endif %}>
+                    Otra
+                </option>
+            </select>
+        </div>
+
+        <div class="query-order">
+            <span>Ordenar actividades por:</span>
+
+            <select name="orden_attr" class="atributo-de-ordenamiento">
+                <option value="">-- Atributo --</option>
+
+                <option value="nombre" {% if orden_attr == "nombre" %}selected{% endif %}>
+                    Nombre
+                </option>
+
+                <option value="dia" {% if orden_attr == "dia" %}selected{% endif %}>
+                    Día
+                </option>
+
+                <option value="hora_inicio" {% if orden_attr == "hora_inicio" %}selected{% endif %}>
+                    Hora inicio
+                </option>
+
+                <option value="tipo" {% if orden_attr == "tipo" %}selected{% endif %}>
+                    Tipo
+                </option>
+            </select>
+
+            <select name="orden_dir" class="tipo-de-ordenamiento">
+                <option value="">-- Ordenamiento --</option>
+
+                <option value="asc" {% if orden_dir == "asc" %}selected{% endif %}>
+                    Menor a mayor
+                </option>
+
+                <option value="desc" {% if orden_dir == "desc" %}selected{% endif %}>
+                    Mayor a menor
+                </option>
+            </select>
+        </div>
+
+        <button type="submit" class="button visible">
+            Buscar
+        </button>
+    </form>
 
     <div class="table-container">
         <table>

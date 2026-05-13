@@ -181,32 +181,58 @@ def logout():
     session.clear()
     return redirect(url_for("login"))
 
-@app.route("/members")
+@app.route("/members", methods=["GET", "POST"])
 def members():
-    
     if request.method == "GET":
         pagina = request.args.get("page", 1, type=int)
         por_pagina = 5
         offset = (pagina - 1) * por_pagina
 
-        miembros = db.get_miembros_paginados(por_pagina, offset)
-        total = db.count_miembros()
-    
+        tipo = request.args.get("tipo", "")
+        orden_attr = request.args.get("orden_attr", "")
+        orden_dir = request.args.get("orden_dir", "")
+
+        miembros = db.get_miembros_paginados(
+            limit=por_pagina,
+            offset=offset,
+            tipo=tipo,
+            orden_attr=orden_attr,
+            orden_dir=orden_dir
+        )
+
+        total = db.count_miembros(tipo=tipo)
+
         return render_template(
             "interfaces/miembros.html",
             miembros=miembros,
             pagina=pagina,
             hay_anterior=pagina > 1,
-            hay_siguiente=offset + por_pagina < total
+            hay_siguiente=offset + por_pagina < total,
+            tipo=tipo,
+            orden_attr=orden_attr,
+            orden_dir=orden_dir
         )
     
-@app.route("/members/<int:member_id>")
+@app.route("/members/<int:member_id>", methods=["GET"])
 def member_detail(member_id):
+    tipo = request.args.get("tipo", "")
+    orden_attr = request.args.get("orden_attr", "")
+    orden_dir = request.args.get("orden_dir", "")
+
     miembro = db.get_miembro_by_id(member_id)
-    actividades = db.get_actividades_by_miembro_id(member_id)
+
+    actividades = db.get_actividades_by_miembro_id(
+        member_id=member_id,
+        tipo=tipo,
+        orden_attr=orden_attr,
+        orden_dir=orden_dir
+    )
 
     return render_template(
         "interfaces/detalle_miembro.html",
         miembro=miembro,
-        actividades=actividades
+        actividades=actividades,
+        tipo=tipo,
+        orden_attr=orden_attr,
+        orden_dir=orden_dir
     )

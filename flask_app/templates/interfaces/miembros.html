@@ -5,33 +5,43 @@
 {% block content %}
         <div class="container">
             <h1> Consulta de miembros</h1>
-            <form id="filters-form">
-                <div class="query-filters">
-                    <span>Filtrar por: </span>
-                    <label>Tipo</label>
-                    <select class="tipo-de-actividad">
-                        <option value="">-- Seleccione --</option>
-                        <option value="Deportiva">Deportiva</option>
-                        <option value="Artística">Artística</option>
-                        <option value="Tecnológica">Tecnológica</option>
-                        <option value="Social">Social</option>
-                        <option value="Recreativa">Recreativa</option>
-                        <option value="Otro">Otro</option>
-                    </select>
-                </div>
+            <form id="members-query-form" method="GET" action="{{ url_for('members') }}">
                 <div class="query-order">
-                    <span>Ordenar por:</span>
-                    <select class="atributo-de-ordenamiento">
+                    <span>Ordenar miembros por:</span>
+
+                    <select name="orden_attr" class="atributo-de-ordenamiento">
                         <option value="">-- Atributo --</option>
-                        <option value="nombre">Nombre</option>
-                        <option value="email">email</option>
+
+                        <option value="nombre" {% if orden_attr == "nombre" %}selected{% endif %}>
+                            Nombre
+                        </option>
+
+                        <option value="apellido" {% if orden_attr == "apellido" %}selected{% endif %}>
+                            Apellido
+                        </option>
+
+                        <option value="email" {% if orden_attr == "email" %}selected{% endif %}>
+                            Email
+                        </option>
+
+                        <option value="fecha_registro" {% if orden_attr == "fecha_registro" %}selected{% endif %}>
+                            Fecha registro
+                        </option>
                     </select>
-                    <select class="tipo-de-ordenamiento">
+
+                    <select name="orden_dir" class="tipo-de-ordenamiento">
                         <option value="">-- Ordenamiento --</option>
-                        <option value=">">Mayor a menor</option>
-                        <option value="<">Menor a mayor</option>
+
+                        <option value="asc" {% if orden_dir == "asc" %}selected{% endif %}>
+                            Menor a mayor
+                        </option>
+
+                        <option value="desc" {% if orden_dir == "desc" %}selected{% endif %}>
+                            Mayor a menor
+                        </option>
                     </select>
                 </div>
+
                 <button type="submit" class="button visible">
                     Buscar
                 </button>
@@ -60,7 +70,7 @@
             </div>
             <div class="pagination">
                 {% if hay_anterior %}
-                    <a href="{{ url_for('members', page=pagina-1) }}">
+                    <a href="{{ url_for('members', page=pagina-1, tipo=tipo, orden_attr=orden_attr, orden_dir=orden_dir) }}">
                         <button>Anterior</button>
                     </a>
                 {% endif %}
@@ -68,7 +78,7 @@
                 <span>Página {{ pagina }}</span>
 
                 {% if hay_siguiente %}
-                    <a href="{{ url_for('members', page=pagina+1) }}">
+                    <a href="{{ url_for('members', page=pagina+1, tipo=tipo, orden_attr=orden_attr, orden_dir=orden_dir) }}">
                         <button>Siguiente</button>
                     </a>
                 {% endif %}
