@@ -39,12 +39,35 @@
             <div class="table-container">
                 <table id="members-query">
                     <tr class="table-head">
-                        <th> Nombre </th>
-                        <th> Email </th>
-                        <th> Actividad </th>
-                        <th> Tipo </th>
+                        <th>Nombre</th>
+                        <th>Email</th>
+                        <th>Actividad</th>
+                        <th>Tipo</th>
                     </tr>
+
+                    {% for miembro in miembros %}
+                        <tr>
+                            <td>{{ miembro.nombre }}</td>
+                            <td>{{ miembro.email }}</td>
+                            <td>{{ miembro.rol }}</td>
+                        </tr>
+                    {% endfor %}
                 </table>
+            </div>
+            <div class="pagination">
+                {% if hay_anterior %}
+                    <a href="{{ url_for('members', page=pagina-1) }}">
+                        <button>Anterior</button>
+                    </a>
+                {% endif %}
+
+                <span>Página {{ pagina }}</span>
+
+                {% if hay_siguiente %}
+                    <a href="{{ url_for('members', page=pagina+1) }}">
+                        <button>Siguiente</button>
+                    </a>
+                {% endif %}
             </div>
             <a href="../interfaces/metricas.html">
                 <button class="section-linker" value="metricas">Métricas</button>

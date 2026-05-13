@@ -14,12 +14,14 @@ from flask import (
 )
 from werkzeug.utils import secure_filename
 
-UPLOAD_FOLDER = 'static/uploads'
-
 app = Flask(__name__)
 
 app.secret_key = "s3cr3t_k3y"
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+UPLOAD_FOLDER = os.path.join(app.root_path, "static", "uploads")
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
+app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 
 # --- Main Routes ---
 @app.route("/")
@@ -58,6 +60,12 @@ def register():
 
 @app.route("/activity", methods=["GET", "POST"])
 def register_activity():
+    miembro_id = session.get("miembro_id")
+
+    if miembro_id is None:
+        flash("Debes iniciar sesión para registrar una actividad.")
+        return redirect(url_for("login"))
+
     if request.method == "GET":
         return render_template("interfaces/actividades.html")
 
@@ -97,10 +105,12 @@ def register_activity():
 
         if status:
             if archivo and archivo.filename:
-                nombre_archivo = secure_filename(archivo.filename)
-                ruta_archivo = os.path.join(app.config["UPLOAD_FOLDER"], nombre_archivo)
+                filename = secure_filename(archivo.filename)
+                ruta_archivo = os.path.join(UPLOAD_FOLDER, filename)
                 archivo.save(ruta_archivo)
-                db.register_foto(result, ruta_archivo, nombre_archivo)
+
+                ruta_db = f"uploads/{filename}"
+                db.register_foto(result, ruta_archivo, ruta_db)
 
             return redirect(url_for("register_activity"))
 
@@ -165,3 +175,28 @@ def login():
         else:
             print("sin session, mostrando login")
             return render_template("interfaces/login.html")
+        
+@app.route("/logout")
+def logout():
+    session.clear()
+    return redirect(url_for("login"))
+
+@app.route("/members")
+def members():
+    
+    if request.method == "GET":
+        pagina = request.args.get("page", 1, type=int)
+        por_pagina = 5
+        offset = (pagina - 1) * por_pagina
+
+        miembros = db.get_miembros_paginados(por_pagina, offset)
+        total = db.count_miembros()
+    
+        return render_template(
+            "interfaces/miembros.html",
+            miembros=miembros,
+            pagina=pagina,
+            hay_anterior=pagina > 1,
+            hay_siguiente=offset + por_pagina < total
+        )
+    

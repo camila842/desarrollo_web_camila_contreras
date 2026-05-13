@@ -97,6 +97,8 @@ CREATE TABLE IF NOT EXISTS `tarea2`.`actividad` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
+ALTER TABLE actividad
+MODIFY tipo ENUM('artistica', 'deportiva', 'tecnologica', 'social', 'recreativa', 'otra') NOT NULL;
 -- -----------------------------------------------------
 -- Table `tarea2`.`foto`
 -- -----------------------------------------------------

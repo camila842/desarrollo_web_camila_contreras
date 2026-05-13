@@ -215,3 +215,38 @@ def login_user(email, password):
     if not check_password_hash(a_user.password_hash, password):
         return False, "Usuario o contraseña incorrectos."
     return True, a_user
+
+def get_miembros_paginados(limit, offset):
+    session = SessionLocal()
+
+    miembros = (
+        session.query(Miembro)
+        .order_by(Miembro.id.asc())
+        .limit(limit)
+        .offset(offset)
+        .all()
+    )
+
+    # resultado = []
+
+    # for miembro in miembros:
+    #     resultado.append({
+    #         "nombre": miembro.nombre,
+    #         "apellido":miembro.apellido,
+    #         "rol":miembro.rol,
+    #         "email": miembro.email,
+    #         "region": miembro.comuna_id            
+    #     })
+
+    session.close()
+    # return resultado
+    return miembros
+
+
+def count_miembros():
+    session = SessionLocal()
+
+    total = session.query(Miembro).count()
+
+    session.close()
+    return total
