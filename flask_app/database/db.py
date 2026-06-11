@@ -1,8 +1,10 @@
 from collections import defaultdict
-from sqlalchemy import create_engine, Column, Integer, String, DateTime, Text, Enum, ForeignKey
+from sqlalchemy import create_engine, func, Column, Integer, String, DateTime, Text, Enum, ForeignKey
 from sqlalchemy.orm import sessionmaker, declarative_base, relationship
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
+
+from datetime import datetime
 
 DB_NAME = "tarea2"
 DB_USERNAME = "db_admin"
@@ -312,3 +314,88 @@ def get_actividades_by_miembro_id(member_id, tipo="", orden_attr="", orden_dir="
 
     session.close()
     return actividades
+
+
+def get_miembros_registrados_por_dia():
+    session = SessionLocal()
+
+    resultados = (
+        session.query(
+            func.date(Miembro.fecha_registro).label("dia"),
+            func.count(Miembro.id).label("cantidad")
+        )
+        .group_by(func.date(Miembro.fecha_registro))
+        .order_by(func.date(Miembro.fecha_registro))
+        .all()
+    )
+
+    session.close()
+
+    return [
+        {
+            "dia": str(dia),
+            "cantidad": cantidad
+        }
+        for dia, cantidad in resultados
+    ]
+    
+def get_total_actividades_por_tipo():
+    session = SessionLocal()
+
+    resultados = (
+        session.query(
+            Actividad.tipo.label("tipo"),
+            func.count(Actividad.id).label("cantidad")
+        )
+        .group_by(Actividad.tipo)
+        .order_by(Actividad.tipo)
+        .all()
+    )
+
+    session.close()
+
+    return [
+        {
+            "tipo": tipo,
+            "cantidad": cantidad
+        }
+        for tipo, cantidad in resultados
+    ]
+
+def get_total_actividades_por_comuna():
+    session = SessionLocal()
+
+    resultados = (
+        session.query(
+            Comuna.nombre.label("comuna"),
+            func.count(Actividad.id).label("cantidad")
+        )
+        .join(Miembro, Miembro.comuna_id == Comuna.id)
+        .join(Actividad, Actividad.miembro_id == Miembro.id)
+        .group_by(Comuna.nombre)
+        .order_by(Comuna.nombre)
+        .all()
+    )
+
+    session.close()
+
+    return [
+        {
+            "comuna": comuna,
+            "cantidad": cantidad
+        }
+        for comuna, cantidad in resultados
+    ]
+    
+def get_actividad_by_id(actividad_id):
+    session = SessionLocal()
+
+    actividad = (
+        session.query(Actividad)
+        .filter(Actividad.id == actividad_id)
+        .first()
+    )
+
+    session.close()
+    return actividad
+

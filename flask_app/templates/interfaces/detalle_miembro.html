@@ -99,7 +99,10 @@
             </tr>
 
             {% for actividad in actividades %}
-                <tr>
+                <tr
+                    onclick="window.location.href='{{ url_for('activity_detail', actividad_id=actividad.id) }}'"
+                    style="cursor: pointer;"
+                >
                     <td>{{ actividad.nombre }}</td>
                     <td>{{ actividad.tipo }}</td>
                     <td>{{ actividad.dia }}</td>

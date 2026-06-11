@@ -4,11 +4,14 @@
         <meta charset="utf-8">
         <title>{% block title %}Extra-Curricular DCC{% endblock %}</title>
         <link rel="stylesheet" href="{{ url_for('static', filename='css/stylesheet.css') }}">
+        {% block head %}{% endblock %}
     </head>
     <body>
         <div class="encabezado">
             <div class="left-side">
-                <h3>Extra-Curricular DCC</h3>
+                <a href="{{ url_for('index') }}">
+                    <h3>Extra-Curricular DCC</h3>
+                </a>
             </div>
             <div class="right-side">
                 {% if session.get("user") and session.get("miembro_id") %}
@@ -34,7 +37,7 @@
                 </a>
             </div>
         </div>
-
         {% block content %}{% endblock %}
+        {% block scripts %}{% endblock %}
     </body>
 </html>

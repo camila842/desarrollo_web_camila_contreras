@@ -90,5 +90,9 @@
             
         </div>
         <div id="form-results"></div>
-        <script src="{{ url_for('static', filename='js/actividades.js') }}"></script>
+
+        
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/actividades.js') }}"></script>
 {% endblock %}

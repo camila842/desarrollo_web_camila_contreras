@@ -1,26 +1,23 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8">
-        <title> Métricas </title>
-        <link rel="stylesheet" href="../css/stylesheet.css">
-    </head>
-    <body>
-        <div class="encabezado">
-            <div class="left-side">
-                <h3>Extra-Curricular DCC</h3>
-            </div>
-            <div class="right-side">
-                <a href="../interfaces/registro.html">
-                    <button class="section-linker" value="registro">Registro</button>
-                </a>
-                <a href="../interfaces/actividades.html">
-                    <button class="section-linker" value="actividades">Actividades</button>
-                </a>
-                <a href="../interfaces/Miembros.html">
-                    <button class="section-linker" value="miembros">Miembros</button>
-                </a>
-            </div>
-        </div>
-    </body>
-</html>
+{% extends "interfaces/encabezado.html" %}
+
+{% block title %}Registro{% endblock %}
+
+{% block head %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highcharts/12.1.2/highcharts.min.js"></script>
+{% endblock %}
+
+{% block content %}
+<h2>Miembros registrados por día</h2>
+<div id="grafico-miembros" style="width:100%; height:400px;"></div>
+
+<h2>Total de actividades extraprogramáticas por tipo</h2>
+<div id="grafico-actividades-tipo" style="width:100%; height:400px;"></div>
+
+<h2>Total de actividades registradas por comuna</h2>
+<div id="grafico-actividades-comuna" style="width:100%; height:400px;"></div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/metricas.js') }}"></script>
+{% endblock %}

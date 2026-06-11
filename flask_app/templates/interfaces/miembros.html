@@ -83,9 +83,12 @@
                     </a>
                 {% endif %}
             </div>
-            <a href="../interfaces/metricas.html">
+            <a href="{{ url_for('metricas')}}">
                 <button class="section-linker" value="metricas">Métricas</button>
             </a>
         </div>
-        <script lang="javascript" src="{{ url_for('static', filename='js/miembros.js') }}"></script>
+        
+{% endblock %}
+{% block scripts %}
+<script lang="javascript" src="{{ url_for('static', filename='js/miembros.js') }}"></script>
 {% endblock %}

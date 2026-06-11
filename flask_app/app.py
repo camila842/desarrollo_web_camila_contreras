@@ -11,6 +11,7 @@ from flask import (
     url_for,
     session,
     flash,
+    jsonify
 )
 from werkzeug.utils import secure_filename
 
@@ -235,4 +236,35 @@ def member_detail(member_id):
         tipo=tipo,
         orden_attr=orden_attr,
         orden_dir=orden_dir
+    )
+    
+@app.route("/api/miembros-por-dia")
+def miembros_por_dia():
+    data = db.get_miembros_registrados_por_dia()
+    return jsonify(data)
+
+@app.route("/metricas")
+def metricas():
+    return render_template("interfaces/metricas.html")
+
+@app.route("/api/actividades-por-tipo")
+def api_actividades_por_tipo():
+    data = db.get_total_actividades_por_tipo()
+    return jsonify(data)
+
+@app.route("/api/actividades-por-comuna")
+def api_actividades_por_comuna():
+    data = db.get_total_actividades_por_comuna()
+    return jsonify(data)
+
+@app.route("/activities/<int:actividad_id>", methods=["GET"])
+def activity_detail(actividad_id):
+    actividad = db.get_actividad_by_id(actividad_id)
+
+    if actividad is None:
+        return "Actividad no encontrada", 404
+
+    return render_template(
+        "interfaces/detalle_actividad.html",
+        actividad=actividad
     )
