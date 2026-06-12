@@ -1,0 +1,62 @@
+{% extends "interfaces/encabezado.html" %}
+
+{% block title %}Detalle actividad{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Detalle de actividad</h1>
+
+    <div class="activity-detail">
+        <p><strong>Nombre:</strong> {{ actividad.nombre }}</p>
+        <p><strong>Tipo:</strong> {{ actividad.tipo }}</p>
+        <p><strong>Día:</strong> {{ actividad.dia }}</p>
+        <p><strong>Hora inicio:</strong> {{ actividad.hora_inicio }}</p>
+        <p><strong>Duración:</strong> {{ actividad.duracion }}</p>
+        <p><strong>Descripción:</strong> {{ actividad.descripcion }}</p>
+    </div>
+
+    <h2>Agregar comentario</h2>
+
+    <div id="comentario-errores"></div>
+
+    <form id="comentario-form" data-actividad-id="{{ actividad.id }}">
+        <div>
+            <label for="nombre">Nombre comentarista</label>
+            <input
+                type="text"
+                id="nombre"
+                name="nombre"
+                required
+                minlength="3"
+                maxlength="80"
+            >
+        </div>
+
+        <div>
+            <label for="texto">Comentario</label>
+            <textarea
+                id="texto"
+                name="texto"
+                rows="4"
+                cols="50"
+                required
+                minlength="5"
+            ></textarea>
+        </div>
+
+        <button type="submit">Agregar comentario</button>
+    </form>
+    <a class="button" href="{{ url_for('member_detail', member_id=actividad.miembro_id) }}">
+        Volver
+    </a>
+    <h2>Comentarios</h2>
+
+    <div id="comentarios-listado">
+        <p>Cargando comentarios...</p>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/detalle_actividad.js') }}"></script>
+{% endblock %}

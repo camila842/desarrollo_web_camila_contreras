@@ -79,7 +79,14 @@ class Actividad(Base):
 
     miembro = relationship("Miembro", back_populates="actividades")
 
+class Comentario(Base):
+    __tablename__ = "comentario"
 
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    nombre = Column(String(80), nullable=False)
+    texto = Column(String(300), nullable=False)
+    fecha = Column(DateTime, nullable=False)
+    actividad_id = Column(Integer, ForeignKey("actividad.id"), nullable=False)
 # --- Database Functions ---
 
 def register_user(username, lastname, email, rol, password, comuna_id):
@@ -399,3 +406,29 @@ def get_actividad_by_id(actividad_id):
     session.close()
     return actividad
 
+def crear_comentario(nombre, texto, actividad_id):
+    session = SessionLocal()
+
+    comentario = Comentario(
+        nombre=nombre,
+        texto=texto,
+        fecha=datetime.now(),
+        actividad_id=actividad_id
+    )
+
+    session.add(comentario)
+    session.commit()
+    session.close()
+    
+def get_comentarios_by_actividad_id(actividad_id):
+    session = SessionLocal()
+
+    comentarios = (
+        session.query(Comentario)
+        .filter(Comentario.actividad_id == actividad_id)
+        .order_by(Comentario.fecha.desc())
+        .all()
+    )
+
+    session.close()
+    return comentarios

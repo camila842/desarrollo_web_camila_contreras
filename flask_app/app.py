@@ -264,7 +264,111 @@ def activity_detail(actividad_id):
     if actividad is None:
         return "Actividad no encontrada", 404
 
+    comentarios = db.get_comentarios_by_actividad_id(actividad_id)
+
     return render_template(
         "interfaces/detalle_actividad.html",
-        actividad=actividad
+        actividad=actividad,
+        comentarios=comentarios,
+        errores=[],
+        nombre_anterior="",
+        texto_anterior=""
     )
+
+@app.route("/activities/<int:actividad_id>/comentarios", methods=["POST"])
+def agregar_comentario(actividad_id):
+    actividad = db.get_actividad_by_id(actividad_id)
+
+    if actividad is None:
+        return "Actividad no encontrada", 404
+
+    nombre = request.form.get("nombre", "").strip()
+    texto = request.form.get("texto", "").strip()
+
+    errores = []
+
+    if len(nombre) < 3 or len(nombre) > 80:
+        errores.append("El nombre debe tener entre 3 y 80 caracteres.")
+
+    if len(texto) < 5:
+        errores.append("El comentario debe tener al menos 5 caracteres.")
+
+    if errores:
+        comentarios = db.get_comentarios_by_actividad_id(actividad_id)
+
+        return render_template(
+            "interfaces/detalle_actividad.html",
+            actividad=actividad,
+            comentarios=comentarios,
+            errores=errores,
+            nombre_anterior=nombre,
+            texto_anterior=texto
+        )
+
+    db.crear_comentario(
+        nombre=nombre,
+        texto=texto,
+        actividad_id=actividad_id
+    )
+
+    return redirect(url_for("activity_detail", actividad_id=actividad_id))
+
+@app.route("/api/activities/<int:actividad_id>/comentarios", methods=["GET"])
+def api_get_comentarios(actividad_id):
+    actividad = db.get_actividad_by_id(actividad_id)
+
+    if actividad is None:
+        return jsonify({"ok": False, "errores": ["Actividad no encontrada"]}), 404
+
+    comentarios = db.get_comentarios_by_actividad_id(actividad_id)
+
+    data = [
+        {
+            "fecha": comentario.fecha.strftime("%Y-%m-%d %H:%M:%S"),
+            "nombre": comentario.nombre,
+            "texto": comentario.texto
+        }
+        for comentario in comentarios
+    ]
+
+    return jsonify({
+        "ok": True,
+        "comentarios": data
+    })
+    
+@app.route("/api/activities/<int:actividad_id>/comentarios", methods=["POST"])
+def api_agregar_comentario(actividad_id):
+    actividad = db.get_actividad_by_id(actividad_id)
+
+    if actividad is None:
+        return jsonify({"ok": False, "errores": ["Actividad no encontrada"]}), 404
+
+    data = request.get_json()
+
+    nombre = data.get("nombre", "").strip()
+    texto = data.get("texto", "").strip()
+
+    errores = []
+
+    if len(nombre) < 3 or len(nombre) > 80:
+        errores.append("El nombre debe tener entre 3 y 80 caracteres.")
+
+    if len(texto) < 5 or len(texto) > 300:
+        errores.append("El comentario debe tener entre 5 y 300 caracteres.")
+
+    if errores:
+        return jsonify({
+            "ok": False,
+            "errores": errores
+        }), 400
+
+    db.crear_comentario(
+        nombre=nombre,
+        texto=texto,
+        actividad_id=actividad_id
+    )
+
+    return jsonify({
+        "ok": True,
+        "mensaje": "Comentario agregado correctamente."
+    })

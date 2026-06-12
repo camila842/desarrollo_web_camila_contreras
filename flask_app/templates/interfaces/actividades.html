@@ -14,7 +14,7 @@
                         <input id="activity-name" name="activity-name" type="text" required>
                         <span class="error" id="error-name">El nombre debe tener al menos 3 caracteres.</span>
                     </div>
-                    <div class="day-selector" >
+                    <fieldset class="day-selector">
                         <legend> Días de la actividad </legend>
                         <div class="day" id="lunes-div">
                             <input type="checkbox" id="day-monday" name="week-day" value="lunes">
@@ -54,7 +54,7 @@
                         </div>
                         <span class="error" id="error-horas">Debe haber hora de inicio y término.</span>
                         <span class="error" id="error-dias">Debes seleccionar al menos un día.</span>
-                    </div>
+                    </fieldset>
                     <div class="type-selector">
                         <label>Tipo de Actividad</label>
                         <select id="tipo-de-actividad" class="tipo-de-actividad" name="tipo">
@@ -68,9 +68,9 @@
                         </select>
                         <span class="error" id="error-tipo">Debes elegir el tipo de actividad.</span>
                     </div>
-                    <div class="file-input" id="file-input-div" multiple>
-                        <label>Imágenes de la actividad (puede ser video o fotografías)</label>
-                        <input type="file" id="file-input" name="file-input">
+                    <div class="file-input" id="file-input-div">
+                        <label for="file-input">Imágenes de la actividad (puede ser video o fotografías)</label>
+                        <input type="file" id="file-input" name="file-input" multiple>
                         <span class="error" id="error-file">Debes ingresar al menos un archivo.</span>
                         <span class="error" id="error-file-type">Solo se soportan archivos .png, .jpg, .jpeg, .</span>
                     </div>

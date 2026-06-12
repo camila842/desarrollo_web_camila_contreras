@@ -15,26 +15,14 @@
             </div>
             <div class="right-side">
                 {% if session.get("user") and session.get("miembro_id") %}
-                    <a href="{{ url_for('logout') }}">
-                        <button class="section-linker" value="logout">Cerrar Sesión</button>
-                    </a>
+                    <a class="section-linker" href="{{ url_for('logout') }}">Cerrar Sesión</a>
                 {% else %}
-                    <a href="{{ url_for('register') }}">
-                        <button class="section-linker" value="registro">Registro</button>
-                    </a>
-
-                    <a href="{{ url_for('login') }}">
-                        <button class="section-linker" value="login">Iniciar Sesión</button>
-                    </a>
+                    <a class="section-linker" href="{{ url_for('register') }}">Registro</a>
+                    <a class="section-linker" href="{{ url_for('login') }}">Iniciar Sesión</a>
                 {% endif %}
 
-                <a href="{{ url_for('register_activity') }}">
-                    <button class="section-linker" value="actividades">Actividades</button>
-                </a>
-
-                <a href="{{ url_for('members') }}">
-                    <button class="section-linker" value="miembros">Miembros</button>
-                </a>
+                <a class="section-linker" href="{{ url_for('register_activity') }}">Actividades</a>
+                <a class="section-linker" href="{{ url_for('members') }}">Miembros</a>
             </div>
         </div>
         {% block content %}{% endblock %}

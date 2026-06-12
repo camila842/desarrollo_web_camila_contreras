@@ -5,6 +5,9 @@
 {% block content %}
         <div class="container">
             <h1> Consulta de miembros</h1>
+            <a class="button" href="{{ url_for('metricas')}}">
+                Métricas
+            </a>
             <form id="members-query-form" method="GET" action="{{ url_for('members') }}">
                 <div class="query-order">
                     <span>Ordenar miembros por:</span>
@@ -83,9 +86,7 @@
                     </a>
                 {% endif %}
             </div>
-            <a href="{{ url_for('metricas')}}">
-                <button class="section-linker" value="metricas">Métricas</button>
-            </a>
+            
         </div>
         
 {% endblock %}
