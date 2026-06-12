@@ -52,3 +52,20 @@
 form {
     display: block;
 }
+.link-button {
+    display: inline-block;
+    padding: 8px 14px;
+    margin-top: 16px;
+    border: 1px solid #333;
+    border-radius: 4px;
+    background-color: #eee;
+    color: #000;
+    text-decoration: none;
+    font: inherit;
+    cursor: pointer;
+    text-align: center;
+}
+
+.link-button:hover {
+    background-color: #ddd;
+}
