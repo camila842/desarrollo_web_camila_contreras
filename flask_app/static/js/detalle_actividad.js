@@ -1,3 +1,30 @@
+// const PALABRAS_PROHIBIDAS = [
+//   "holi",
+//   "que tal",
+//   "weeena"
+// ];
+
+async function cargarPalabrasProhibidas() {
+  const response = await fetch("/api/palabras-prohibidas");
+  const data = await response.json();
+
+  if (!data.ok) {
+    return [];
+  }
+
+  return data.palabras;
+}
+
+async function contienePalabraProhibida(texto) {
+  const textoNormalizado = texto.toLowerCase();
+  const palabrasProhibidas = await cargarPalabrasProhibidas()
+  console.log(palabrasProhibidas);
+  return palabrasProhibidas.some(palabra => {
+    return textoNormalizado.includes(palabra.toLowerCase());
+  });
+}
+
+
 async function cargarComentarios() {
   try {
     const form = document.getElementById("comentario-form");
@@ -58,20 +85,23 @@ async function cargarComentarios() {
 }
 
 
-function validarComentario(nombre, texto) {
+async function validarComentario(nombre, texto) {
   const errores = [];
 
   if (nombre.length < 3 || nombre.length > 80) {
     errores.push("El nombre debe tener entre 3 y 80 caracteres.");
   }
 
-  if (texto.length < 5) {
-    errores.push("El comentario debe tener al menos 5 caracteres.");
+  if (texto.length < 5 || texto.length > 300) {
+    errores.push("El comentario debe tener entre 5 y 300 caracteres.");
+  }
+
+  if (await contienePalabraProhibida(texto)) {
+    errores.push("El comentario contiene palabras no permitidas.");
   }
 
   return errores;
 }
-
 
 function mostrarErroresComentario(errores) {
   const contenedorErrores = document.getElementById("comentario-errores");
@@ -103,7 +133,7 @@ async function agregarComentario(event) {
   const nombre = nombreInput.value.trim();
   const texto = textoInput.value.trim();
 
-  const errores = validarComentario(nombre, texto);
+  const errores = await validarComentario(nombre, texto);
 
   if (errores.length > 0) {
     mostrarErroresComentario(errores);

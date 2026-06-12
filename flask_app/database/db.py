@@ -14,6 +14,12 @@ DB_PORT = 3306
 
 DATABASE_URL = f"mysql+pymysql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 
+PALABRAS_PROHIBIDAS =[
+  "holi",
+  "que tal",
+  "weeena"
+]
+
 engine = create_engine(DATABASE_URL, echo=False, future=True)
 SessionLocal = sessionmaker(bind=engine)
 
@@ -432,3 +438,4 @@ def get_comentarios_by_actividad_id(actividad_id):
 
     session.close()
     return comentarios
+

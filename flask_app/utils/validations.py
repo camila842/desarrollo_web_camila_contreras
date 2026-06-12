@@ -1,10 +1,13 @@
 from datetime import datetime
+import os
 
 VALID_ROLES       = {"Estudiante Pre Grado", "Estudiante Post Grado", "Funcionario", "Académico"}
 SPECIAL_CHARS     = set("@¿?{}.")
 VALID_FILE_TYPES  = {"png", "jpg", "jpeg", "mp4"}
 VALID_TIPOS       = {"artistica", "deportiva", "tecnologica", "social", "recreativa", "otra"}
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+PALABRAS_PROHIBIDAS_PATH = os.path.join(BASE_DIR, "data", "palabras_prohibidas.txt")
 
 def validate_register_user(username, lastname, email, rol, password, comuna_id=None):
     if not username or len(username.strip()) < 3:
@@ -87,3 +90,27 @@ def _validate_email(email):
     if "." not in domain or not all(domain.split(".")):
         return False, "Email inválido."
     return True, ""
+
+
+def cargar_palabras_prohibidas(palabras_prohibidas_path):
+    palabras = []
+
+    with open(palabras_prohibidas_path, "r", encoding="utf-8") as archivo:
+        for linea in archivo:
+            #print(f"linea:{linea}\n")
+            palabra = linea.strip()
+            #print(f"palabra:{palabra}\n")
+            if palabra:
+                palabras.append(palabra.lower())
+
+    return palabras
+
+def contiene_palabra_prohibida(texto,path):
+    texto_normalizado = texto.lower()
+    prohibido = cargar_palabras_prohibidas(path)
+
+    for palabra in prohibido:
+        if palabra.lower() in texto_normalizado:
+            return True
+
+    return False

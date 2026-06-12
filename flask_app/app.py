@@ -1,7 +1,7 @@
 
 import os
 from database import db
-from utils.helpers import *
+from utils.validations import *
 from utils.validations import validate_register_user, validate_activity, validate_login_user
 from flask import (
     Flask,
@@ -349,12 +349,18 @@ def api_agregar_comentario(actividad_id):
     texto = data.get("texto", "").strip()
 
     errores = []
+    
+    base_path = os.path.dirname(os.path.abspath(__file__))
+    file_path = os.path.join(base_path,"data","palabras_prohibidas.txt")
 
     if len(nombre) < 3 or len(nombre) > 80:
         errores.append("El nombre debe tener entre 3 y 80 caracteres.")
 
     if len(texto) < 5 or len(texto) > 300:
         errores.append("El comentario debe tener entre 5 y 300 caracteres.")
+        
+    if contiene_palabra_prohibida(texto,file_path):
+        errores.append("El comentario contiene palabras no permitidas.")
 
     if errores:
         return jsonify({
@@ -371,4 +377,15 @@ def api_agregar_comentario(actividad_id):
     return jsonify({
         "ok": True,
         "mensaje": "Comentario agregado correctamente."
+    })
+    
+@app.route("/api/palabras-prohibidas", methods=["GET"])
+def api_palabras_prohibidas():
+    base_path = os.path.dirname(os.path.abspath(__file__))
+    file_path = os.path.join(base_path,"data","palabras_prohibidas.txt")
+    palabras = cargar_palabras_prohibidas(file_path)
+
+    return jsonify({
+        "ok": True,
+        "palabras": palabras
     })

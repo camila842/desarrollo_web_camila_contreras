@@ -33,3 +33,11 @@ Se agregó una vista de detalle para cada actividad. Esta vista muestra informac
 Desde esta página también se permite agregar comentarios y volver al detalle del miembro relacionado.
 
 Para mantener HTML válido, los botones de navegación fueron implementados como enlaces estilizados mediante CSS cuando su función es redirigir a otra página.
+
+### Filtro de palabras en comentarios
+
+Como decisión de diseño, se incorporó un filtro básico de palabras que pueden ser consideradas ofensivas o inapropiadas dentro de los comentarios.
+
+El objetivo de este filtro es evitar que se registren comentarios con lenguaje inadecuado en la plataforma, manteniendo un espacio más respetuoso para la comunidad. Si el texto ingresado contiene alguna palabra incluida en la lista de términos restringidos, el comentario no es aceptado por el sistema.
+
+Este filtro fue implementado como una validación adicional sobre el formulario de comentarios. La lista de palabras consideradas no permitidas fue definida de manera manual y puede ser ajustada en el futuro según los criterios de moderación que se quieran aplicar.
