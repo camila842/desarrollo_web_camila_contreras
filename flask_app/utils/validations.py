@@ -1,5 +1,6 @@
 from datetime import datetime
 import os
+from database import db
 
 VALID_ROLES       = {"Estudiante Pre Grado", "Estudiante Post Grado", "Funcionario", "Académico"}
 SPECIAL_CHARS     = set("@¿?{}.")
@@ -25,6 +26,8 @@ def validate_register_user(username, lastname, email, rol, password, comuna_id=N
         return False, "La contraseña debe tener al menos un carácter especial: @, ¿, ?, {, }, ."
     if not comuna_id:
         return False, "Seleccione una comuna."
+    if db.get_user_by_email(email) is not None:
+        return False, "Ya existe un usuario registrado con ese correo."
     return True, ""
 
 
