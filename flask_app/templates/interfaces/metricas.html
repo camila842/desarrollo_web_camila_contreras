@@ -1,12 +1,15 @@
 {% extends "interfaces/encabezado.html" %}
 
-{% block title %}Registro{% endblock %}
+{% block title %}Métricas{% endblock %}
 
 {% block head %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highcharts/12.1.2/highcharts.min.js"></script>
 {% endblock %}
 
 {% block content %}
+<a class="link-button" href="{{ url_for('members') }}">
+    Volver
+</a>
 <h2>Miembros registrados por día</h2>
 <div id="grafico-miembros" style="width:100%; height:400px;"></div>
 
