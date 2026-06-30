@@ -1,5 +1,9 @@
 package com.tarea4.tarea4.services;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -7,9 +11,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.tarea4.tarea4.models.Actividad;
@@ -38,6 +45,7 @@ public class AppService {
     private final FotoRepository fotoRepository;
     private final ComentarioRepository comentarioRepository;
     private final PasswordEncoder passwordEncoder;
+    private final String pathStatic;
 
     public AppService(
         MiembroRepository miembroRepository,
@@ -46,13 +54,20 @@ public class AppService {
         FotoRepository fotoRepository,
         ComentarioRepository comentarioRepository,
         PasswordEncoder passwordEncoder
-    ) {
+    ) throws IOException {
         this.miembroRepository = miembroRepository;
         this.comunaRepository = comunaRepository;
         this.actividadRepository = actividadRepository;
         this.fotoRepository = fotoRepository;
         this.comentarioRepository = comentarioRepository;
         this.passwordEncoder = passwordEncoder;
+
+        Path staticDir = Paths.get(
+            ResourceUtils.getFile("classpath:static").getAbsolutePath()
+        );
+
+        this.pathStatic = staticDir.toString();
+        System.out.println("Static path resolved to: " + this.pathStatic);
     }
 
     public Miembro registerUser(
@@ -112,6 +127,46 @@ public class AppService {
         Foto foto = new Foto(
             rutaArchivo,
             nombreArchivo,
+            actividad
+        );
+
+        return fotoRepository.save(foto);
+    }
+    public Foto registerFotoFromUpload(
+        Integer actividadId,
+        MultipartFile archivo
+    ) throws Exception {
+        Actividad actividad = actividadRepository.findById(actividadId).orElse(null);
+
+        if (actividad == null) {
+            throw new IllegalArgumentException("La actividad no existe.");
+        }
+
+        String originalFilename = archivo.getOriginalFilename();
+
+        if (originalFilename == null || originalFilename.isEmpty()) {
+            throw new IllegalArgumentException("Archivo inválido.");
+        }
+
+        String safeFilename = originalFilename.replaceAll("[^a-zA-Z0-9._-]", "_");
+
+        Path uploadsDir = Paths.get(pathStatic + "/uploads");
+
+        if (!Files.exists(uploadsDir)) {
+            Files.createDirectories(uploadsDir);
+        }
+
+        Path finalPath = Paths.get(pathStatic + "/uploads/" + safeFilename);
+
+        try (InputStream inputStream = archivo.getInputStream()) {
+            Files.copy(inputStream, finalPath, StandardCopyOption.REPLACE_EXISTING);
+        }
+
+        String rutaDb = "uploads/" + safeFilename;
+
+        Foto foto = new Foto(
+            finalPath.toString(),
+            rutaDb,
             actividad
         );
 
