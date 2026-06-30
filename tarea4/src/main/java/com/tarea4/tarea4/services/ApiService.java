@@ -17,12 +17,15 @@ import com.tarea4.tarea4.models.Actividad;
 import com.tarea4.tarea4.models.Comentario;
 import com.tarea4.tarea4.models.ComentarioRepository;
 import com.tarea4.tarea4.models.Miembro;
+import com.tarea4.tarea4.models.Nota;
+import com.tarea4.tarea4.models.NotaRepository;
 @Service
 public class ApiService {
 
     private final MiembroRepository miembroRepository;
     private final ActividadRepository actividadRepository;
     private final ComentarioRepository comentarioRepository;
+    private final NotaRepository notaRepository;
 
     private static final String PALABRAS_PROHIBIDAS_PATH =
         "src/main/resources/data/palabras_prohibidas.txt";
@@ -30,11 +33,13 @@ public class ApiService {
     public ApiService(
         MiembroRepository miembroRepository,
         ActividadRepository actividadRepository,
-        ComentarioRepository comentarioRepository
+        ComentarioRepository comentarioRepository,
+        NotaRepository notaRepository
     ) {
         this.miembroRepository = miembroRepository;
         this.actividadRepository = actividadRepository;
         this.comentarioRepository = comentarioRepository;
+        this.notaRepository = notaRepository;
     }
 
     public List<Map<String, Object>> getMiembrosRegistradosPorDia() {
@@ -167,7 +172,7 @@ public class ApiService {
         );
     }
 
-    public Map<String, Object> buscarActividades(String q) {
+    public Map<String, Object> buscarActividades(String q, Integer miembroId) {
         if (q == null || q.trim().length() < 3) {
             Map<String, Object> error = new HashMap<>();
             error.put("ok", false);
@@ -176,7 +181,7 @@ public class ApiService {
         }
 
         List<Actividad> actividades = actividadRepository.buscarPorTexto(q.trim());
-        List<Map<String, String>> resultados = new ArrayList<>();
+        List<Map<String, Object>> resultados = new ArrayList<>();
 
         for (Actividad actividad : actividades) {
             Miembro miembro = actividad.getMiembro();
@@ -185,19 +190,77 @@ public class ApiService {
                 comunaNombre = miembro.getComuna().getNombre();
             }
 
-            Map<String, String> item = new HashMap<>();
+            Double promedio = notaRepository.findPromedioByActividadId(actividad.getId());
+            Long cantidadNotas = notaRepository.countByActividadId(actividad.getId());
+
+            boolean yaEvaluo = miembroId != null &&
+                notaRepository.existsByActividadIdAndMiembroId(actividad.getId(), miembroId);
+            boolean puedeEvaluar = miembroId != null && !yaEvaluo;
+
+            Map<String, Object> item = new HashMap<>();
+            item.put("actividadId", actividad.getId());
             item.put("nombre", actividad.getNombre());
             item.put("descripcion", actividad.getDescripcion() != null ? actividad.getDescripcion() : "");
             item.put("dia", actividad.getDia());
             item.put("tipo", actividad.getTipo());
             item.put("miembro", miembro != null ? miembro.getNombre() : "");
             item.put("comuna", comunaNombre);
+            item.put("promedio", promedio);
+            item.put("cantidadNotas", cantidadNotas);
+            item.put("yaEvaluo", yaEvaluo);
+            item.put("puedeEvaluar", puedeEvaluar);
             resultados.add(item);
         }
 
         Map<String, Object> response = new HashMap<>();
         response.put("ok", true);
         response.put("resultados", resultados);
+        return response;
+    }
+
+    public Map<String, Object> agregarNota(Integer actividadId, Integer nota, Integer miembroId) {
+        if (nota == null || nota < 1 || nota > 7) {
+            Map<String, Object> error = new HashMap<>();
+            error.put("ok", false);
+            error.put("errores", List.of("La nota debe ser un número entero entre 1 y 7."));
+            return error;
+        }
+
+        if (notaRepository.existsByActividadIdAndMiembroId(actividadId, miembroId)) {
+            Map<String, Object> error = new HashMap<>();
+            error.put("ok", false);
+            error.put("yaEvaluo", true);
+            error.put("errores", List.of("Ya evaluaste esta actividad."));
+            return error;
+        }
+
+        Actividad actividad = actividadRepository.findById(actividadId).orElse(null);
+
+        if (actividad == null) {
+            Map<String, Object> error = new HashMap<>();
+            error.put("ok", false);
+            error.put("errores", List.of("Actividad no encontrada."));
+            return error;
+        }
+
+        Miembro miembro = miembroRepository.findById(miembroId).orElse(null);
+
+        if (miembro == null) {
+            Map<String, Object> error = new HashMap<>();
+            error.put("ok", false);
+            error.put("errores", List.of("Usuario no encontrado."));
+            return error;
+        }
+
+        notaRepository.save(new Nota(nota, actividad, miembro));
+
+        Double promedio = notaRepository.findPromedioByActividadId(actividadId);
+        Long cantidadNotas = notaRepository.countByActividadId(actividadId);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("ok", true);
+        response.put("promedio", promedio);
+        response.put("cantidadNotas", cantidadNotas);
         return response;
     }
 }

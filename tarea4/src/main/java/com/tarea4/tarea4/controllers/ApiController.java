@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.tarea4.tarea4.services.ApiService;
 
+import jakarta.servlet.http.HttpSession;
+
 @RestController
 public class ApiController {
 
@@ -75,11 +77,53 @@ public class ApiController {
 
     @GetMapping("/api/actividades/buscar")
     public ResponseEntity<Map<String, Object>> buscarActividades(
-        @RequestParam("q") String q
+        @RequestParam("q") String q,
+        HttpSession session
     ) {
-        Map<String, Object> response = apiService.buscarActividades(q);
+        Integer miembroId = (Integer) session.getAttribute("miembro_id");
+        Map<String, Object> response = apiService.buscarActividades(q, miembroId);
 
         if (Boolean.FALSE.equals(response.get("ok"))) {
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/api/activities/{actividad_id}/notas")
+    public ResponseEntity<Map<String, Object>> agregarNota(
+        @PathVariable("actividad_id") Integer actividadId,
+        @RequestBody Map<String, Object> body,
+        HttpSession session
+    ) {
+        Integer miembroId = (Integer) session.getAttribute("miembro_id");
+
+        if (miembroId == null) {
+            return ResponseEntity.status(401).body(Map.of(
+                "ok", false,
+                "errores", List.of("Debes iniciar sesión para evaluar.")
+            ));
+        }
+
+        Integer nota = null;
+        Object notaRaw = body.get("nota");
+
+        if (notaRaw instanceof Integer i) {
+            nota = i;
+        } else if (notaRaw instanceof Long l) {
+            nota = l.intValue();
+        } else if (notaRaw instanceof Double d) {
+            if (d == Math.floor(d) && !Double.isInfinite(d)) {
+                nota = d.intValue();
+            }
+        }
+
+        Map<String, Object> response = apiService.agregarNota(actividadId, nota, miembroId);
+
+        if (Boolean.FALSE.equals(response.get("ok"))) {
+            if (Boolean.TRUE.equals(response.get("yaEvaluo"))) {
+                return ResponseEntity.status(409).body(response);
+            }
             return ResponseEntity.badRequest().body(response);
         }
 

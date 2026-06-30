@@ -28,6 +28,13 @@
                 </div>
             </form>
 
+            <p
+                th:if="${session.miembro_id == null}"
+                id="aviso-sesion"
+            >
+                <a th:href="@{/login}">Inicia sesión</a> para poder evaluar actividades.
+            </p>
+
             <div id="buscar-resultados"></div>
         </div>
 
