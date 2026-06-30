@@ -1,12 +1,12 @@
 const checkNombre = () => {
-    const nombre = document.getElementById("name").value;
-    const valido = nombre && nombre.length >= 3;
+    const nombre = document.getElementById("name").value.trim();
+    const valido = nombre.length >= 3;
     document.getElementById("error-name").className = valido ? "error" : "error visible";
     return valido;
 };
 const checkApellido = () => {
-    const apellido = document.getElementById("surname").value;
-    const valido = apellido && apellido.length >= 3;
+    const apellido = document.getElementById("surname").value.trim();
+    const valido = apellido.length >= 3;
     document.getElementById("error-surname").className = valido ? "error" : "error visible";
     return valido;
 };

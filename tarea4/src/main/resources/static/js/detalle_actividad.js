@@ -151,7 +151,7 @@ async function agregarComentario(event) {
   const errores = await validarComentario(nombre, texto);
 
   if (errores.length > 0) {
-    mostrarErroresComentario(errores);
+    document.getElementById("comentario-errores").innerHTML = "";
     return;
   }
 

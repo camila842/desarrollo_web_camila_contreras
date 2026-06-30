@@ -47,8 +47,8 @@ const attachTimeListeners = (timeSelector) => {
 };
 
 const checkNombre = () => {
-    const nombre = document.getElementById("activity-name").value;
-    const valido = nombre && nombre.length >= 3;
+    const nombre = document.getElementById("activity-name").value.trim();
+    const valido = nombre.length >= 3;
 
     document.getElementById("error-name").className = valido ? "error" : "error visible";
 
@@ -170,7 +170,7 @@ const addActivity = (event) => {
 
 const validateActivity = (event) => {
     const validadorNombre = (nombre) => {
-        return nombre && nombre.length >= 3;
+        return nombre.trim().length >= 3;
     };
 
     const validadorTipo = (tipo) => {
