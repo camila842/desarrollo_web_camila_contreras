@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+    <head>
+        <meta charset="utf-8" />
+        <title>Métricas</title>
+
+        <link rel="stylesheet" th:href="@{/css/stylesheet.css}" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highcharts/12.1.2/highcharts.min.js"></script>
+    </head>
+
+    <body>
+        <div th:replace="~{fragments/nav :: navbar}"></div>
+
+        <a class="link-button" th:href="@{/members}">
+            Volver
+        </a>
+
+        <h2>Miembros registrados por día</h2>
+        <div id="grafico-miembros" style="width:100%; height:400px;"></div>
+
+        <h2>Total de actividades extraprogramáticas por tipo</h2>
+        <div id="grafico-actividades-tipo" style="width:100%; height:400px;"></div>
+
+        <h2>Total de actividades registradas por comuna</h2>
+        <div id="grafico-actividades-comuna" style="width:100%; height:400px;"></div>
+
+        <script th:src="@{/js/metricas.js}"></script>
+    </body>
+</html>

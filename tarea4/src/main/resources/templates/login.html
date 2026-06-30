@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+    <head>
+        <meta charset="utf-8" />
+        <title>Iniciar Sesión</title>
+
+        <link rel="stylesheet" th:href="@{/css/stylesheet.css}" />
+    </head>
+
+    <body>
+        <div th:replace="~{fragments/nav :: navbar}"></div>
+
+        <div class="container">
+            <form
+                class="formulario"
+                id="login-form"
+                th:action="@{/login}"
+                method="POST"
+            >
+                <div class="sign-up-input" id="email-input">
+                    <label>Correo Electrónico</label>
+                    <input id="email" name="email" class="email" type="email" />
+                    <span class="error" id="error-email">
+                        Email inválido.
+                    </span>
+                </div>
+
+                <div class="sign-up-input" id="password-input">
+                    <label>Contraseña</label>
+                    <input
+                        id="contrasenna"
+                        name="contrasenna"
+                        class="password"
+                        type="password"
+                    />
+                    <span class="error" id="error-password">
+                        Ingrese su contraseña.
+                    </span>
+                </div>
+
+                <button type="submit" class="button visible" id="forms-submit">
+                    Iniciar Sesión
+                </button>
+
+                <span
+                    class="error visible"
+                    id="server-error"
+                    th:if="${error != null}"
+                    th:text="${error}"
+                ></span>
+            </form>
+        </div>
+    </body>
+</html>

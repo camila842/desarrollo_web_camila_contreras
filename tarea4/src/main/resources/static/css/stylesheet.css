@@ -1,0 +1,71 @@
+.encabezado{
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.activities-register { 
+    font-size: 0.85em; display: none; 
+}
+.activities-register.visible { 
+    display: block; 
+}
+.time-selector { 
+    font-size: 0.85em; display: none; 
+}
+.time-selector.visible { 
+    display: block; 
+}
+
+.button { 
+    font-size: 0.85em; display: none; 
+}
+.button.visible { 
+    display: block; 
+}
+
+
+.form-results { 
+    border: 1px solid #ccc; padding: 10px; margin: 8px 0; border-radius: 4px; display: block;
+}
+.form-results .tipo { 
+    font-size: 0.8em; color: #666; text-transform: uppercase; 
+}
+.form-results .nombre { 
+    font-weight: bold; 
+}
+.contador { 
+    color: #666; font-size: 0.9em; margin-bottom: 10px; 
+}
+
+.error {
+    color: #f80bc5; display: none;
+}
+.error.visible {
+    display: block;
+}
+.actividad-item span {
+    display: block;
+    margin-bottom: 5px;
+}
+
+form {
+    display: block;
+}
+.link-button {
+    display: inline-block;
+    padding: 8px 14px;
+    margin-top: 16px;
+    border: 1px solid #333;
+    border-radius: 4px;
+    background-color: #eee;
+    color: #000;
+    text-decoration: none;
+    font: inherit;
+    cursor: pointer;
+    text-align: center;
+}
+
+.link-button:hover {
+    background-color: #ddd;
+}

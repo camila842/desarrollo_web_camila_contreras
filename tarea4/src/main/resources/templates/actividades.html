@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+    <head>
+        <meta charset="utf-8" />
+        <title>Actividades</title>
+
+        <link rel="stylesheet" th:href="@{/css/stylesheet.css}" />
+    </head>
+
+    <body>
+        <div th:replace="~{fragments/nav :: navbar}"></div>
+
+        <div class="container" id="form-container">
+            <button type="button" id="add-activity" class="button visible">
+                Añadir Actividad
+            </button>
+
+            <form
+                class="activities-register"
+                id="activities-register"
+                th:action="@{/activity}"
+                method="POST"
+                enctype="multipart/form-data"
+            >
+                <div class="activity-container" id="act-1">
+                    <div class="name-input">
+                        <label>Nombre actividad</label>
+                        <input
+                            id="activity-name"
+                            name="activity-name"
+                            type="text"
+                            required
+                        />
+                        <span class="error" id="error-name">
+                            El nombre debe tener al menos 3 caracteres.
+                        </span>
+                    </div>
+
+                    <fieldset class="day-selector">
+                        <legend>Días de la actividad</legend>
+
+                        <div class="day" id="lunes-div">
+                            <input
+                                type="checkbox"
+                                id="day-monday"
+                                name="week-day"
+                                value="lunes"
+                            />
+                            <label for="day-monday">Lunes</label>
+
+                            <div class="time-selector">
+                                <label>Desde:</label>
+                                <input type="time" name="from-time" class="from-time" />
+
+                                <label>Hasta:</label>
+                                <input type="time" name="until-time" class="until-time" />
+                            </div>
+                        </div>
+
+                        <div class="day" id="martes-div">
+                            <input
+                                type="checkbox"
+                                id="day-tuesday"
+                                name="week-day"
+                                value="martes"
+                            />
+                            <label for="day-tuesday">Martes</label>
+                        </div>
+
+                        <div class="day" id="miércoles-div">
+                            <input
+                                type="checkbox"
+                                id="day-wednesday"
+                                name="week-day"
+                                value="miércoles"
+                            />
+                            <label for="day-wednesday">Miércoles</label>
+                        </div>
+
+                        <div class="day" id="jueves-div">
+                            <input
+                                type="checkbox"
+                                id="day-thursday"
+                                name="week-day"
+                                value="jueves"
+                            />
+                            <label for="day-thursday">Jueves</label>
+                        </div>
+
+                        <div class="day" id="viernes-div">
+                            <input
+                                type="checkbox"
+                                id="day-friday"
+                                name="week-day"
+                                value="viernes"
+                            />
+                            <label for="day-friday">Viernes</label>
+                        </div>
+
+                        <div class="day" id="sábado-div">
+                            <input
+                                type="checkbox"
+                                id="day-saturday"
+                                name="week-day"
+                                value="sábado"
+                            />
+                            <label for="day-saturday">Sábado</label>
+                        </div>
+
+                        <div class="day" id="domingo-div">
+                            <input
+                                type="checkbox"
+                                id="day-sunday"
+                                name="week-day"
+                                value="domingo"
+                            />
+                            <label for="day-sunday">Domingo</label>
+                        </div>
+
+                        <span class="error" id="error-horas">
+                            Debe haber hora de inicio y término.
+                        </span>
+                        <span class="error" id="error-dias">
+                            Debes seleccionar al menos un día.
+                        </span>
+                    </fieldset>
+
+                    <div class="type-selector">
+                        <label>Tipo de Actividad</label>
+                        <select
+                            id="tipo-de-actividad"
+                            class="tipo-de-actividad"
+                            name="tipo"
+                        >
+                            <option value="">-- Seleccione --</option>
+                            <option value="deportiva">Deportiva</option>
+                            <option value="artistica">Artística</option>
+                            <option value="tecnologica">Tecnológica</option>
+                            <option value="social">Social</option>
+                            <option value="recreativa">Recreativa</option>
+                            <option value="otra">Otra</option>
+                        </select>
+                        <span class="error" id="error-tipo">
+                            Debes elegir el tipo de actividad.
+                        </span>
+                    </div>
+
+                    <div class="file-input" id="file-input-div">
+                        <label for="file-input">
+                            Imágenes de la actividad o video
+                        </label>
+                        <input
+                            type="file"
+                            id="file-input"
+                            name="file-input"
+                            multiple
+                        />
+                        <span class="error" id="error-file">
+                            Debes ingresar al menos un archivo.
+                        </span>
+                        <span class="error" id="error-file-type">
+                            Solo se soportan archivos .png, .jpg, .jpeg, .mp4.
+                        </span>
+                    </div>
+
+                    <div class="url-div" id="url-div">
+                        <label>Link con más información al respecto</label>
+                        <input type="url" id="input-url" />
+                    </div>
+                </div>
+
+                <button type="submit" id="submit-activity" class="button">
+                    Inscribir Actividad
+                </button>
+
+                <span
+                    class="error visible"
+                    th:if="${error != null}"
+                    th:text="${error}"
+                ></span>
+            </form>
+        </div>
+
+        <div id="form-results"></div>
+
+        <script th:src="@{/js/actividades.js}"></script>
+    </body>
+</html>

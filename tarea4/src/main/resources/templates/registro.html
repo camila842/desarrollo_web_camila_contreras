@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+    <head>
+        <meta charset="utf-8" />
+        <title>Registro</title>
+
+        <link rel="stylesheet" th:href="@{/css/stylesheet.css}" />
+    </head>
+
+    <body>
+        <div th:replace="~{fragments/nav :: navbar}"></div>
+
+        <div class="container">
+            <form
+                class="formulario"
+                id="sign-up-form"
+                th:action="@{/register}"
+                method="POST"
+            >
+                <div class="sign-up-input" id="name-input">
+                    <label>Nombre</label>
+                    <input id="name" name="name" class="name" type="text" />
+                    <span class="error" id="error-name">
+                        El nombre debe tener al menos 3 caracteres.
+                    </span>
+                </div>
+
+                <div class="sign-up-input" id="surname-input">
+                    <label>Apellido</label>
+                    <input id="surname" name="surname" class="surname" type="text" />
+                    <span class="error" id="error-surname">
+                        El apellido debe tener al menos 3 caracteres.
+                    </span>
+                </div>
+
+                <div class="sign-up-input">
+                    <p>Rol en la Facultad:</p>
+                    <select id="role-input" name="role">
+                        <option value="">--Seleccione--</option>
+                        <option value="Estudiante Pre Grado">Estudiante Pre Grado</option>
+                        <option value="Estudiante Post Grado">Estudiante Post Grado</option>
+                        <option value="Funcionario">Funcionario</option>
+                        <option value="Académico">Académico</option>
+                    </select>
+                    <span class="error" id="error-role">Seleccione 1 rol.</span>
+                </div>
+
+                <div class="sign-up-input" id="email-input">
+                    <label>Correo Electrónico</label>
+                    <input id="email" name="email" class="email" type="email" />
+                    <span class="error" id="error-email">Email inválido.</span>
+                </div>
+
+                <div class="sign-up-input" id="region-input">
+                    <p>Región:</p>
+                    <select id="region-select">
+                        <option value="">--Seleccione--</option>
+                        <option
+                            th:each="region : ${comunas}"
+                            th:value="${region['id']}"
+                            th:text="${region['nombre']}"
+                        ></option>
+                    </select>
+                    <span class="error" id="error-region">Seleccione una región.</span>
+                </div>
+
+                <div class="sign-up-input" id="comuna-input">
+                    <p>Comuna:</p>
+                    <select id="comuna-select" name="comuna_id" disabled>
+                        <option value="">--Seleccione región primero--</option>
+                    </select>
+                    <span class="error" id="error-comuna">Seleccione una comuna.</span>
+                </div>
+
+                <script th:inline="javascript">
+                    const COMUNAS_POR_REGION = /*[[${comunas}]]*/ [];
+                </script>
+
+                <div class="sign-up-input" id="password-input">
+                    <label>Contraseña</label>
+                    <input
+                        id="password"
+                        name="password"
+                        class="password"
+                        type="password"
+                    />
+                    <span class="error" id="error-password-length">
+                        Contraseña debe tener un largo de al menos 8 caracteres.
+                    </span>
+                    <span class="error" id="error-password-caracter">
+                        Contraseña debe tener al menos un caracter especial:
+                        "@, ¿, ? , {, } , .".
+                    </span>
+                </div>
+
+                <button type="submit" class="button visible" id="forms-submit">
+                    Registrarse
+                </button>
+
+                <span
+                    class="error visible"
+                    id="server-error"
+                    th:if="${error != null}"
+                    th:text="${error}"
+                ></span>
+
+                <span class="error" id="not-error-mesage">
+                    ¡Felicidades! Tu cuenta ha sido registrada exitosamente.
+                </span>
+            </form>
+        </div>
+
+        <script th:src="@{/js/registro.js}"></script>
+    </body>
+</html>

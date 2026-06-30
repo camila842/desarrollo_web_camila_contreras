@@ -435,6 +435,8 @@ public class AppService {
 
         if ("nombre".equals(ordenAttr)) {
             columna = "nombre";
+        } else if ("apellido".equals(ordenAttr)) {
+            columna = "apellido";
         } else if ("email".equals(ordenAttr)) {
             columna = "email";
         } else if ("fecha_registro".equals(ordenAttr)) {

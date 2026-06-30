@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+    <head>
+        <meta charset="utf-8" />
+        <title>Extra-Curricular DCC</title>
+
+        <link rel="stylesheet" th:href="@{/css/stylesheet.css}" />
+    </head>
+
+    <body>
+        <div th:replace="~{fragments/nav :: navbar}"></div>
+
+        <div class="container">
+            <h1>Bienvenido/a a Extra-Curricular DCC</h1>
+
+            <p>
+                Gestiona los miembros y actividades extracurriculares del
+                Departamento de Ciencias de la Computación.
+            </p>
+
+            <h2>Últimos 5 miembros agregados</h2>
+
+            <div class="table-container">
+                <table id="members-query">
+                    <tr class="table-head">
+                        <th>Nombre</th>
+                        <th>Email</th>
+                        <th>Actividad</th>
+                        <th>Tipo</th>
+                    </tr>
+
+                    <tr th:if="${members == null or #lists.isEmpty(members)}">
+                        <td colspan="4">No hay miembros registrados aún.</td>
+                    </tr>
+
+                    <tr th:each="member : ${members}">
+                        <td th:text="${member['nombre']}"></td>
+                        <td th:text="${member['email']}"></td>
+                        <td th:text="${member['actividad']}"></td>
+                        <td th:text="${member['tipo']}"></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </body>
+</html>

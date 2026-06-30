@@ -1,0 +1,41 @@
+<div th:fragment="navbar" class="encabezado">
+    <div class="left-side">
+        <a th:href="@{/}">
+            <h3>Extra-Curricular DCC</h3>
+        </a>
+    </div>
+
+    <div class="right-side">
+        <a
+            class="section-linker"
+            th:if="${session.user != null and session.miembro_id != null}"
+            th:href="@{/logout}"
+        >
+            Cerrar Sesión
+        </a>
+
+        <a
+            class="section-linker"
+            th:if="${session.user == null or session.miembro_id == null}"
+            th:href="@{/register}"
+        >
+            Registro
+        </a>
+
+        <a
+            class="section-linker"
+            th:if="${session.user == null or session.miembro_id == null}"
+            th:href="@{/login}"
+        >
+            Iniciar Sesión
+        </a>
+
+        <a class="section-linker" th:href="@{/activity}">
+            Actividades
+        </a>
+
+        <a class="section-linker" th:href="@{/members}">
+            Miembros
+        </a>
+    </div>
+</div>

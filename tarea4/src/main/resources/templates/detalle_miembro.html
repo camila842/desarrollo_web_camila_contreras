@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+    <head>
+        <meta charset="utf-8" />
+        <title>Detalle miembro</title>
+
+        <link rel="stylesheet" th:href="@{/css/stylesheet.css}" />
+    </head>
+
+    <body>
+        <div th:replace="~{fragments/nav :: navbar}"></div>
+
+        <div class="container">
+            <h1>Detalle del miembro</h1>
+
+            <div class="member-detail">
+                <p>
+                    <strong>Nombre:</strong>
+                    <span th:text="${miembro.nombre}"></span>
+                </p>
+
+                <p>
+                    <strong>Email:</strong>
+                    <span th:text="${miembro.email}"></span>
+                </p>
+            </div>
+
+            <h2>Actividades</h2>
+
+            <form
+                id="activities-query-form"
+                method="GET"
+                th:action="@{/members/{id}(id=${miembro.id})}"
+            >
+                <div class="query-filters">
+                    <span>Filtrar actividades por:</span>
+
+                    <label>Tipo</label>
+                    <select name="tipo" class="tipo-de-actividad">
+                        <option value="">-- Seleccione --</option>
+
+                        <option
+                            value="deportiva"
+                            th:selected="${tipo == 'deportiva'}"
+                        >
+                            Deportiva
+                        </option>
+
+                        <option
+                            value="artistica"
+                            th:selected="${tipo == 'artistica'}"
+                        >
+                            Artística
+                        </option>
+
+                        <option
+                            value="tecnologica"
+                            th:selected="${tipo == 'tecnologica'}"
+                        >
+                            Tecnológica
+                        </option>
+
+                        <option
+                            value="social"
+                            th:selected="${tipo == 'social'}"
+                        >
+                            Social
+                        </option>
+
+                        <option
+                            value="recreativa"
+                            th:selected="${tipo == 'recreativa'}"
+                        >
+                            Recreativa
+                        </option>
+
+                        <option
+                            value="otra"
+                            th:selected="${tipo == 'otra'}"
+                        >
+                            Otra
+                        </option>
+                    </select>
+                </div>
+
+                <div class="query-order">
+                    <span>Ordenar actividades por:</span>
+
+                    <select name="orden_attr" class="atributo-de-ordenamiento">
+                        <option value="">-- Atributo --</option>
+
+                        <option
+                            value="nombre"
+                            th:selected="${orden_attr == 'nombre'}"
+                        >
+                            Nombre
+                        </option>
+
+                        <option
+                            value="dia"
+                            th:selected="${orden_attr == 'dia'}"
+                        >
+                            Día
+                        </option>
+
+                        <option
+                            value="hora_inicio"
+                            th:selected="${orden_attr == 'hora_inicio'}"
+                        >
+                            Hora inicio
+                        </option>
+
+                        <option
+                            value="tipo"
+                            th:selected="${orden_attr == 'tipo'}"
+                        >
+                            Tipo
+                        </option>
+                    </select>
+
+                    <select name="orden_dir" class="tipo-de-ordenamiento">
+                        <option value="">-- Ordenamiento --</option>
+
+                        <option
+                            value="asc"
+                            th:selected="${orden_dir == 'asc'}"
+                        >
+                            Menor a mayor
+                        </option>
+
+                        <option
+                            value="desc"
+                            th:selected="${orden_dir == 'desc'}"
+                        >
+                            Mayor a menor
+                        </option>
+                    </select>
+                </div>
+
+                <button type="submit" class="button visible">
+                    Buscar
+                </button>
+            </form>
+
+            <div class="table-container">
+                <table>
+                    <tr class="table-head">
+                        <th>Nombre</th>
+                        <th>Tipo</th>
+                        <th>Día</th>
+                        <th>Hora inicio</th>
+                        <th>Duración</th>
+                        <th>Descripción</th>
+                    </tr>
+
+                    <tr
+                        th:each="actividad : ${actividades}"
+                        th:onclick="|window.location.href='@{/activities/{id}(id=${actividad.id})}'|"
+                        style="cursor: pointer;"
+                    >
+                        <td th:text="${actividad.nombre}"></td>
+                        <td th:text="${actividad.tipo}"></td>
+                        <td th:text="${actividad.dia}"></td>
+                        <td th:text="${actividad.horaInicio}"></td>
+                        <td th:text="${actividad.duracion}"></td>
+                        <td th:text="${actividad.descripcion != null ? actividad.descripcion : ''}"></td>
+                    </tr>
+                </table>
+            </div>
+
+            <a class="link-button" th:href="@{/members}">
+                Volver
+            </a>
+        </div>
+    </body>
+</html>

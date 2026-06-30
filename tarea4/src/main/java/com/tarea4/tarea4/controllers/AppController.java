@@ -32,14 +32,14 @@ public class AppController {
     public String index(Model model) {
         List<Map<String, String>> lastMembers = appService.getLastMembers(5);
         model.addAttribute("members", lastMembers);
-        return "interfaces/welcome";
+        return "welcome";
     }
 
     @GetMapping("/register")
     public String registerGet(Model model) {
         List<Map<String, Object>> comunas = appService.getComunas();
         model.addAttribute("comunas", comunas);
-        return "interfaces/registro";
+        return "registro";
     }
 
     @PostMapping("/register")
@@ -88,7 +88,7 @@ public class AppController {
             return "redirect:/login";
         }
 
-        return "interfaces/actividades";
+        return "actividades";
     }
 
     @PostMapping("/activity")
@@ -143,7 +143,7 @@ public class AppController {
             return "redirect:/";
         }
 
-        return "interfaces/login";
+        return "login";
     }
 
     @PostMapping("/login")
@@ -158,7 +158,7 @@ public class AppController {
 
             if (miembro == null) {
                 model.addAttribute("error", "Usuario o contraseña incorrectos.");
-                return "interfaces/login";
+                return "login";
             }
 
             session.setAttribute("user", miembro.getEmail());
@@ -167,7 +167,7 @@ public class AppController {
             return "redirect:/";
         } catch (IllegalArgumentException e) {
             model.addAttribute("error", e.getMessage());
-            return "interfaces/login";
+            return "login";
         }
     }
 
@@ -206,7 +206,7 @@ public class AppController {
         model.addAttribute("orden_attr", ordenAttr);
         model.addAttribute("orden_dir", ordenDir);
 
-        return "interfaces/miembros";
+        return "miembros";
     }
 
     @GetMapping("/members/{member_id}")
@@ -232,12 +232,12 @@ public class AppController {
         model.addAttribute("orden_attr", ordenAttr);
         model.addAttribute("orden_dir", ordenDir);
 
-        return "interfaces/detalle_miembro";
+        return "detalle_miembro";
     }
 
     @GetMapping("/metricas")
     public String metricas() {
-        return "interfaces/metricas";
+        return "metricas";
     }
 
     @GetMapping("/activities/{actividad_id}")
@@ -259,7 +259,7 @@ public class AppController {
         model.addAttribute("nombre_anterior", "");
         model.addAttribute("texto_anterior", "");
 
-        return "interfaces/detalle_actividad";
+        return "detalle_actividad";
     }
 
     @PostMapping("/activities/{actividad_id}/comentarios")
@@ -295,7 +295,7 @@ public class AppController {
             model.addAttribute("nombre_anterior", nombre);
             model.addAttribute("texto_anterior", texto);
 
-            return "interfaces/detalle_actividad";
+            return "detalle_actividad";
         }
     }
 }

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+    <head>
+        <meta charset="utf-8" />
+        <title>Miembros</title>
+
+        <link rel="stylesheet" th:href="@{/css/stylesheet.css}" />
+    </head>
+
+    <body>
+        <div th:replace="~{fragments/nav :: navbar}"></div>
+
+        <div class="container">
+            <h1>Consulta de miembros</h1>
+
+            <a class="link-button" th:href="@{/metricas}">
+                Métricas
+            </a>
+
+            <form id="members-query-form" method="GET" th:action="@{/members}">
+                <div class="query-order">
+                    <span>Ordenar miembros por:</span>
+
+                    <select name="orden_attr" class="atributo-de-ordenamiento">
+                        <option value="">-- Atributo --</option>
+
+                        <option
+                            value="nombre"
+                            th:selected="${orden_attr == 'nombre'}"
+                        >
+                            Nombre
+                        </option>
+
+                        <option
+                            value="apellido"
+                            th:selected="${orden_attr == 'apellido'}"
+                        >
+                            Apellido
+                        </option>
+
+                        <option
+                            value="email"
+                            th:selected="${orden_attr == 'email'}"
+                        >
+                            Email
+                        </option>
+
+                        <option
+                            value="fecha_registro"
+                            th:selected="${orden_attr == 'fecha_registro'}"
+                        >
+                            Fecha registro
+                        </option>
+                    </select>
+
+                    <select name="orden_dir" class="tipo-de-ordenamiento">
+                        <option value="">-- Ordenamiento --</option>
+
+                        <option
+                            value="asc"
+                            th:selected="${orden_dir == 'asc'}"
+                        >
+                            Menor a mayor
+                        </option>
+
+                        <option
+                            value="desc"
+                            th:selected="${orden_dir == 'desc'}"
+                        >
+                            Mayor a menor
+                        </option>
+                    </select>
+                </div>
+
+                <button type="submit" class="button visible">
+                    Buscar
+                </button>
+            </form>
+
+            <div class="table-container">
+                <table id="members-query">
+                    <tr class="table-head">
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>Rol</th>
+                        <th>Email</th>
+                    </tr>
+
+                    <tr
+                        th:each="miembro : ${miembros}"
+                        th:onclick="|window.location.href='@{/members/{id}(id=${miembro.id})}'|"
+                        style="cursor: pointer;"
+                    >
+                        <td th:text="${miembro.nombre}"></td>
+                        <td th:text="${miembro.apellido != null ? miembro.apellido : ''}"></td>
+                        <td th:text="${miembro.rol != null ? miembro.rol : ''}"></td>
+                        <td th:text="${miembro.email}"></td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="pagination">
+                <a
+                    th:if="${hay_anterior}"
+                    th:href="@{/members(
+                        page=${pagina - 1},
+                        tipo=${tipo},
+                        orden_attr=${orden_attr},
+                        orden_dir=${orden_dir}
+                    )}"
+                >
+                    <button>Anterior</button>
+                </a>
+
+                <span th:text="|Página ${pagina}|"></span>
+
+                <a
+                    th:if="${hay_siguiente}"
+                    th:href="@{/members(
+                        page=${pagina + 1},
+                        tipo=${tipo},
+                        orden_attr=${orden_attr},
+                        orden_dir=${orden_dir}
+                    )}"
+                >
+                    <button>Siguiente</button>
+                </a>
+            </div>
+        </div>
+
+        <script th:src="@{/js/miembros.js}"></script>
+    </body>
+</html>

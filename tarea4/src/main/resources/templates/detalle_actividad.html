@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+    <head>
+        <meta charset="utf-8" />
+        <title>Detalle actividad</title>
+
+        <link rel="stylesheet" th:href="@{/css/stylesheet.css}" />
+    </head>
+
+    <body>
+        <div th:replace="~{fragments/nav :: navbar}"></div>
+
+        <div class="container">
+            <h1>Detalle de actividad</h1>
+
+            <div class="activity-detail">
+                <p>
+                    <strong>Nombre:</strong>
+                    <span th:text="${actividad.nombre}"></span>
+                </p>
+
+                <p>
+                    <strong>Tipo:</strong>
+                    <span th:text="${actividad.tipo}"></span>
+                </p>
+
+                <p>
+                    <strong>Día:</strong>
+                    <span th:text="${actividad.dia}"></span>
+                </p>
+
+                <p>
+                    <strong>Hora inicio:</strong>
+                    <span th:text="${actividad.horaInicio}"></span>
+                </p>
+
+                <p>
+                    <strong>Duración:</strong>
+                    <span th:text="${actividad.duracion}"></span>
+                </p>
+
+                <p>
+                    <strong>Descripción:</strong>
+                    <span th:text="${actividad.descripcion != null ? actividad.descripcion : ''}"></span>
+                </p>
+            </div>
+
+            <h2>Agregar comentario</h2>
+
+            <div id="comentario-errores"></div>
+
+            <form
+                id="comentario-form"
+                th:attr="data-actividad-id=${actividad.id}"
+            >
+                <div>
+                    <label for="nombre">Nombre comentarista</label>
+                    <input
+                        type="text"
+                        id="nombre"
+                        name="nombre"
+                        required
+                        minlength="3"
+                        maxlength="80"
+                    />
+                </div>
+
+                <div>
+                    <label for="texto">Comentario</label>
+                    <textarea
+                        id="texto"
+                        name="texto"
+                        rows="4"
+                        cols="50"
+                        required
+                        minlength="5"
+                        maxlength="300"
+                    ></textarea>
+                </div>
+
+                <button type="submit">Agregar comentario</button>
+            </form>
+
+            <a
+                class="link-button"
+                th:href="@{/members/{id}(id=${actividad.miembro.id})}"
+            >
+                Volver
+            </a>
+
+            <h2>Comentarios</h2>
+
+            <div id="comentarios-listado">
+                <p>Cargando comentarios...</p>
+            </div>
+        </div>
+
+        <script th:src="@{/js/detalle_actividad.js}"></script>
+    </body>
+</html>
