@@ -12,6 +12,12 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "comentario")
 public class Comentario {
@@ -69,7 +75,48 @@ public class Comentario {
         return actividad;
     }
 
-    public static Boolean validateComentario(String nombre, String texto) {
+    public static List<String> cargarPalabrasProhibidas(String palabrasProhibidasPath) {
+        List<String> palabras = new ArrayList<>();
+
+        try {
+            List<String> lineas = Files.readAllLines(Path.of(palabrasProhibidasPath));
+
+            for (String linea : lineas) {
+                String palabra = linea.trim();
+
+                if (!palabra.isEmpty()) {
+                    palabras.add(palabra.toLowerCase());
+                }
+            }
+        } catch (IOException e) {
+            return palabras;
+        }
+
+        return palabras;
+    }
+
+    public static Boolean contienePalabraProhibida(String texto, String palabrasProhibidasPath) {
+        if (texto == null) {
+            return false;
+        }
+
+        String textoNormalizado = texto.toLowerCase();
+        List<String> palabrasProhibidas = cargarPalabrasProhibidas(palabrasProhibidasPath);
+
+        for (String palabra : palabrasProhibidas) {
+            if (textoNormalizado.contains(palabra.toLowerCase())) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public static Boolean validateComentario(
+        String nombre,
+        String texto,
+        String palabrasProhibidasPath
+    ) {
         if (nombre == null || nombre.trim().isEmpty()) {
             return false;
         }
@@ -86,12 +133,8 @@ public class Comentario {
             return false;
         }
 
-        String textoLower = texto.toLowerCase();
-
-        for (String palabra : PALABRAS_PROHIBIDAS) {
-            if (textoLower.contains(palabra.toLowerCase())) {
-                return false;
-            }
+        if (contienePalabraProhibida(texto, palabrasProhibidasPath)) {
+            return false;
         }
 
         return true;

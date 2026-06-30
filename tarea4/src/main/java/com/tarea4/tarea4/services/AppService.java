@@ -10,6 +10,7 @@ import java.util.Map;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.tarea4.tarea4.models.Actividad;
 import com.tarea4.tarea4.models.ActividadRepository;
@@ -68,6 +69,22 @@ public class AppService {
             comuna = comunaRepository.findById(comunaId).orElse(null);
         }
 
+        Boolean emailExists = miembroRepository.findByEmail(email).isPresent();
+
+        String validationError = Miembro.validateRegisterUser(
+            username,
+            lastname,
+            email,
+            rol,
+            password,
+            comunaId,
+            emailExists
+        );
+
+        if (!validationError.isEmpty()) {
+            throw new IllegalArgumentException(validationError);
+        }
+
         Miembro miembro = new Miembro(
             username,
             lastname,
@@ -107,8 +124,22 @@ public class AppService {
         String horaInicio,
         String horaFin,
         String tipo,
-        Integer miembroId
-    ) {
+        Integer miembroId,
+        MultipartFile archivo
+    ){
+        String validationError = Actividad.validateActivity(
+            nombre,
+            dias,
+            horaInicio,
+            horaFin,
+            tipo,
+            archivo,
+            miembroId
+        );
+
+        if (!validationError.isEmpty()) {
+            throw new IllegalArgumentException(validationError);
+        }
         Miembro miembro = miembroRepository.findById(miembroId).orElse(null);
 
         if (miembro == null) {
@@ -206,6 +237,11 @@ public class AppService {
     }
 
     public Miembro loginUser(String email, String password) {
+        String validationError = Miembro.validateLoginUser(email, password);
+
+        if (!validationError.isEmpty()) {
+            throw new IllegalArgumentException(validationError);
+        }
         Miembro user = getUserByEmail(email);
 
         if (user == null) {
@@ -269,9 +305,10 @@ public class AppService {
     public Comentario crearComentario(
         String nombre,
         String texto,
-        Integer actividadId
+        Integer actividadId,
+        String palabrasProhibidasPath
     ) {
-        if (!Comentario.validateComentario(nombre, texto)) {
+        if (!Comentario.validateComentario(nombre, texto, palabrasProhibidasPath)) {
             throw new IllegalArgumentException("El comentario no es válido.");
         }
 
