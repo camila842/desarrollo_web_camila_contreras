@@ -1,6 +1,7 @@
 package com.tarea4.tarea4.models;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -14,6 +15,12 @@ import jakarta.validation.constraints.NotNull;
 @Entity
 @Table(name = "comentario")
 public class Comentario {
+
+    private static final List<String> PALABRAS_PROHIBIDAS = List.of(
+        "holi",
+        "que tal",
+        "weeena"
+    );
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -60,5 +67,33 @@ public class Comentario {
 
     public Actividad getActividad() {
         return actividad;
+    }
+
+    public static Boolean validateComentario(String nombre, String texto) {
+        if (nombre == null || nombre.trim().isEmpty()) {
+            return false;
+        }
+
+        if (texto == null || texto.trim().isEmpty()) {
+            return false;
+        }
+
+        if (nombre.length() > 80) {
+            return false;
+        }
+
+        if (texto.length() > 300) {
+            return false;
+        }
+
+        String textoLower = texto.toLowerCase();
+
+        for (String palabra : PALABRAS_PROHIBIDAS) {
+            if (textoLower.contains(palabra.toLowerCase())) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
