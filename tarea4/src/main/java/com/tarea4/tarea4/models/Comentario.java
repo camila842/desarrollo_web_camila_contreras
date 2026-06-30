@@ -16,17 +16,17 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.List;
+
 
 @Entity
 @Table(name = "comentario")
 public class Comentario {
 
-    private static final List<String> PALABRAS_PROHIBIDAS = List.of(
-        "holi",
-        "que tal",
-        "weeena"
-    );
+    // private static final List<String> PALABRAS_PROHIBIDAS = List.of(
+    //     "holi",
+    //     "que tal",
+    //     "weeena"
+    // );
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
