@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+    <head>
+        <meta charset="utf-8" />
+        <title>Buscar actividades</title>
+
+        <link rel="stylesheet" th:href="@{/css/stylesheet.css}" />
+    </head>
+
+    <body>
+        <div th:replace="~{fragments/nav :: navbar}"></div>
+
+        <div class="container">
+            <h1>Buscar actividades</h1>
+
+            <form id="buscar-form" onsubmit="return false;">
+                <div class="sign-up-input" id="buscar-input">
+                    <label for="buscar-texto">Buscar por nombre, descripción o comuna</label>
+                    <input
+                        type="text"
+                        id="buscar-texto"
+                        name="texto"
+                        autocomplete="off"
+                    />
+                    <span class="error" id="error-buscar">
+                        Ingresa al menos 3 caracteres para buscar.
+                    </span>
+                </div>
+            </form>
+
+            <div id="buscar-resultados"></div>
+        </div>
+
+        <script th:src="@{/js/buscar.js}"></script>
+    </body>
+</html>

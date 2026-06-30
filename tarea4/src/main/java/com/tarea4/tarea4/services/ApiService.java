@@ -16,6 +16,7 @@ import java.time.format.DateTimeFormatter;
 import com.tarea4.tarea4.models.Actividad;
 import com.tarea4.tarea4.models.Comentario;
 import com.tarea4.tarea4.models.ComentarioRepository;
+import com.tarea4.tarea4.models.Miembro;
 @Service
 public class ApiService {
 
@@ -164,5 +165,39 @@ public class ApiService {
             "ok", true,
             "palabras", palabras
         );
+    }
+
+    public Map<String, Object> buscarActividades(String q) {
+        if (q == null || q.trim().length() < 3) {
+            Map<String, Object> error = new HashMap<>();
+            error.put("ok", false);
+            error.put("errores", List.of("La búsqueda debe tener al menos 3 caracteres."));
+            return error;
+        }
+
+        List<Actividad> actividades = actividadRepository.buscarPorTexto(q.trim());
+        List<Map<String, String>> resultados = new ArrayList<>();
+
+        for (Actividad actividad : actividades) {
+            Miembro miembro = actividad.getMiembro();
+            String comunaNombre = "";
+            if (miembro != null && miembro.getComuna() != null) {
+                comunaNombre = miembro.getComuna().getNombre();
+            }
+
+            Map<String, String> item = new HashMap<>();
+            item.put("nombre", actividad.getNombre());
+            item.put("descripcion", actividad.getDescripcion() != null ? actividad.getDescripcion() : "");
+            item.put("dia", actividad.getDia());
+            item.put("tipo", actividad.getTipo());
+            item.put("miembro", miembro != null ? miembro.getNombre() : "");
+            item.put("comuna", comunaNombre);
+            resultados.add(item);
+        }
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("ok", true);
+        response.put("resultados", resultados);
+        return response;
     }
 }

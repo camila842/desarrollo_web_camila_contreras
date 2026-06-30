@@ -7,12 +7,13 @@ import java.util.Set;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.Lob;
+//import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -45,7 +46,8 @@ public class Actividad {
     @NotNull
     private String nombre;
 
-    @Lob
+    // @Lob
+    @Column(length = 500)
     private String descripcion;
 
     @OneToMany(mappedBy = "actividad")
@@ -58,14 +60,13 @@ public class Actividad {
     }
 
     public Actividad(
-        Miembro miembro,
-        String dia,
-        String horaInicio,
-        String duracion,
-        String tipo,
-        String nombre,
-        String descripcion
-    ) {
+            Miembro miembro,
+            String dia,
+            String horaInicio,
+            String duracion,
+            String tipo,
+            String nombre,
+            String descripcion) {
         this.miembro = miembro;
         this.dia = dia;
         this.horaInicio = horaInicio;
@@ -114,31 +115,29 @@ public class Actividad {
     public List<Comentario> getComentarios() {
         return comentarios;
     }
+
     private static final Set<String> VALID_TIPOS = Set.of(
-        "artistica",
-        "deportiva",
-        "tecnologica",
-        "social",
-        "recreativa",
-        "otra"
-    );
+            "artistica",
+            "deportiva",
+            "tecnologica",
+            "social",
+            "recreativa",
+            "otra");
 
     private static final Set<String> VALID_FILE_TYPES = Set.of(
-        "png",
-        "jpg",
-        "jpeg",
-        "mp4"
-    );
+            "png",
+            "jpg",
+            "jpeg",
+            "mp4");
 
     public static String validateActivity(
-        String nombre,
-        List<String> dias,
-        String horaInicio,
-        String horaFin,
-        String tipo,
-        MultipartFile archivo,
-        Integer miembroId
-    ) {
+            String nombre,
+            List<String> dias,
+            String horaInicio,
+            String horaFin,
+            String tipo,
+            MultipartFile archivo,
+            Integer miembroId) {
         if (miembroId == null) {
             return "Debes iniciar sesión para registrar una actividad.";
         }
@@ -207,5 +206,5 @@ public class Actividad {
         }
 
         return "";
-}
+    }
 }

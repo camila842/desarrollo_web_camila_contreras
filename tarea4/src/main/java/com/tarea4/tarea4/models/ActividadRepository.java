@@ -35,4 +35,15 @@ public interface ActividadRepository extends JpaRepository<Actividad, Integer> {
         ORDER BY c.nombre
     """)
     List<Object[]> countActividadesPorComuna();
+
+    @Query("""
+        SELECT DISTINCT a
+        FROM Actividad a
+        JOIN a.miembro m
+        LEFT JOIN m.comuna c
+        WHERE LOWER(a.nombre) LIKE LOWER(CONCAT('%', :q, '%'))
+           OR LOWER(COALESCE(a.descripcion, '')) LIKE LOWER(CONCAT('%', :q, '%'))
+           OR LOWER(COALESCE(c.nombre, '')) LIKE LOWER(CONCAT('%', :q, '%'))
+    """)
+    List<Actividad> buscarPorTexto(String q);
 }

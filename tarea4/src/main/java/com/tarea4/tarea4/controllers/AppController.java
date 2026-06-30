@@ -240,6 +240,11 @@ public class AppController {
         return "metricas";
     }
 
+    @GetMapping("/buscar")
+    public String buscar() {
+        return "buscar";
+    }
+
     @GetMapping("/activities/{actividad_id}")
     public String activityDetail(
         @PathVariable("actividad_id") Integer actividadId,

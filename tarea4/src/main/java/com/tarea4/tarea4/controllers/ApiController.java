@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tarea4.tarea4.services.ApiService;
@@ -70,5 +71,18 @@ public class ApiController {
     @GetMapping("/api/palabras-prohibidas")
     public Map<String, Object> getPalabrasProhibidas() {
         return apiService.getPalabrasProhibidas();
+    }
+
+    @GetMapping("/api/actividades/buscar")
+    public ResponseEntity<Map<String, Object>> buscarActividades(
+        @RequestParam("q") String q
+    ) {
+        Map<String, Object> response = apiService.buscarActividades(q);
+
+        if (Boolean.FALSE.equals(response.get("ok"))) {
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        return ResponseEntity.ok(response);
     }
 }
