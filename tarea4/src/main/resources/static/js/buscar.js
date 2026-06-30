@@ -280,6 +280,14 @@ function crearResultadoNode(actividad, query) {
   // Sección de evaluación (evaluar / ya evaluaste / inicia sesión)
   div.appendChild(crearSeccionEvaluar(actividad));
 
+  // Enlace al detalle completo de la actividad
+  const verDetalle = document.createElement("a");
+  verDetalle.href = `/activities/${actividad.actividadId}`;
+  verDetalle.className = "link-button";
+  verDetalle.textContent = "Ver detalle";
+  verDetalle.style.marginTop = "8px";
+  div.appendChild(verDetalle);
+
   return div;
 }
 

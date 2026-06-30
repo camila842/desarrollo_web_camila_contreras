@@ -137,13 +137,23 @@ public class Actividad {
             String horaFin,
             String tipo,
             MultipartFile archivo,
-            Integer miembroId) {
+            Integer miembroId,
+            String descripcion) {
         if (miembroId == null) {
             return "Debes iniciar sesión para registrar una actividad.";
         }
 
         if (nombre == null || nombre.trim().length() < 3) {
             return "El nombre debe tener al menos 3 caracteres.";
+        }
+
+        if (descripcion != null && !descripcion.trim().isEmpty()) {
+            if (descripcion.trim().length() < 5) {
+                return "Si ingresa descripción, debe tener al menos 5 caracteres.";
+            }
+            if (descripcion.length() > 500) {
+                return "La descripción no puede superar los 500 caracteres.";
+            }
         }
 
         if (dias == null || dias.isEmpty()) {

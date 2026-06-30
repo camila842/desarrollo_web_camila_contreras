@@ -98,6 +98,7 @@ public class AppController {
         @RequestParam("until-time") List<String> untilTimes,
         @RequestParam("tipo") String tipo,
         @RequestParam("activity-name") String nombreActividad,
+        @RequestParam(value = "descripcion", required = false) String descripcion,
         @RequestParam(value = "file-input", required = false) MultipartFile archivo,
         HttpSession session,
         RedirectAttributes redirectAttributes
@@ -123,7 +124,8 @@ public class AppController {
                 horaFin,
                 tipo,
                 miembroId,
-                archivo
+                archivo,
+                descripcion
             );
 
             if (archivo != null && !archivo.isEmpty()) {
@@ -248,7 +250,8 @@ public class AppController {
     @GetMapping("/activities/{actividad_id}")
     public String activityDetail(
         @PathVariable("actividad_id") Integer actividadId,
-        Model model
+        Model model,
+        HttpSession session
     ) {
         Actividad actividad = appService.getActividadById(actividadId);
 
@@ -258,11 +261,25 @@ public class AppController {
 
         List<Comentario> comentarios = appService.getComentariosByActividadId(actividadId);
 
+        Double promedio = appService.getPromedioNota(actividadId);
+        Long cantidadNotas = appService.getCantidadNotas(actividadId);
+        String promedioTexto = promedio != null ? String.format("%.1f", promedio) : "-";
+
+        Integer miembroId = (Integer) session.getAttribute("miembro_id");
+        boolean usuarioLogueado = miembroId != null;
+        boolean yaEvaluo = usuarioLogueado && appService.yaEvaluoActividad(actividadId, miembroId);
+        boolean puedeEvaluar = usuarioLogueado && !yaEvaluo;
+
         model.addAttribute("actividad", actividad);
         model.addAttribute("comentarios", comentarios);
         model.addAttribute("errores", List.of());
         model.addAttribute("nombre_anterior", "");
         model.addAttribute("texto_anterior", "");
+        model.addAttribute("promedioTexto", promedioTexto);
+        model.addAttribute("cantidadNotas", cantidadNotas != null ? cantidadNotas : 0L);
+        model.addAttribute("usuarioLogueado", usuarioLogueado);
+        model.addAttribute("yaEvaluo", yaEvaluo);
+        model.addAttribute("puedeEvaluar", puedeEvaluar);
 
         return "detalle_actividad";
     }

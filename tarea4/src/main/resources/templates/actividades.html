@@ -29,10 +29,22 @@
                             id="activity-name"
                             name="activity-name"
                             type="text"
-                            required
                         />
                         <span class="error" id="error-name">
                             El nombre debe tener al menos 3 caracteres.
+                        </span>
+                    </div>
+
+                    <div class="name-input">
+                        <label for="descripcion">Descripción de la actividad (opcional)</label>
+                        <textarea
+                            id="descripcion"
+                            name="descripcion"
+                            rows="4"
+                            cols="50"
+                        ></textarea>
+                        <span class="error" id="error-descripcion">
+                            Si ingresa descripción, debe tener entre 5 y 500 caracteres.
                         </span>
                     </div>
 

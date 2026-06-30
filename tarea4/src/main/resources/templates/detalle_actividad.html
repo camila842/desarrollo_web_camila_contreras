@@ -43,6 +43,66 @@
                     <strong>Descripción:</strong>
                     <span th:text="${actividad.descripcion != null ? actividad.descripcion : ''}"></span>
                 </p>
+
+                <p>
+                    <strong>Miembro:</strong>
+                    <span th:text="${actividad.miembro != null ? actividad.miembro.nombre : '-'}"></span>
+                </p>
+
+                <p>
+                    <strong>Comuna:</strong>
+                    <span th:text="${actividad.miembro != null and actividad.miembro.comuna != null ? actividad.miembro.comuna.nombre : '-'}"></span>
+                </p>
+
+                <p>
+                    <strong>Nota promedio:</strong>
+                    <span id="nota-promedio" th:text="${promedioTexto}"></span>
+                    <span
+                        id="nota-cantidad"
+                        style="color: #666; font-size: 0.9em;"
+                        th:text="|${cantidadNotas} evaluaciones|"
+                    ></span>
+                </p>
+            </div>
+
+            <h2>Evaluación</h2>
+
+            <div id="evaluacion-seccion">
+
+                <div th:if="${puedeEvaluar}">
+                    <form
+                        id="evaluacion-form"
+                        th:attr="data-actividad-id=${actividad.id}"
+                        onsubmit="return false;"
+                    >
+                        <p><strong>Selecciona una nota:</strong></p>
+
+                        <div class="nota-opciones">
+                            <label><input type="radio" name="nota" value="1" /> 1</label>
+                            <label><input type="radio" name="nota" value="2" /> 2</label>
+                            <label><input type="radio" name="nota" value="3" /> 3</label>
+                            <label><input type="radio" name="nota" value="4" /> 4</label>
+                            <label><input type="radio" name="nota" value="5" /> 5</label>
+                            <label><input type="radio" name="nota" value="6" /> 6</label>
+                            <label><input type="radio" name="nota" value="7" /> 7</label>
+                        </div>
+
+                        <span class="error" id="error-evaluacion"></span>
+
+                        <button type="submit" class="link-button">
+                            Confirmar evaluación
+                        </button>
+                    </form>
+                </div>
+
+                <p th:if="${yaEvaluo}" class="ya-evaluo">
+                    Ya evaluaste esta actividad.
+                </p>
+
+                <p th:if="${!usuarioLogueado}">
+                    <a th:href="@{/login}">Inicia sesión</a> para evaluar esta actividad.
+                </p>
+
             </div>
 
             <h2>Agregar comentario</h2>
@@ -59,10 +119,8 @@
                         type="text"
                         id="nombre"
                         name="nombre"
-                        required
-                        minlength="3"
-                        maxlength="80"
                     />
+                    <span class="error" id="error-nombre-comentario"></span>
                 </div>
 
                 <div>
@@ -72,10 +130,8 @@
                         name="texto"
                         rows="4"
                         cols="50"
-                        required
-                        minlength="5"
-                        maxlength="300"
                     ></textarea>
+                    <span class="error" id="error-texto-comentario"></span>
                 </div>
 
                 <button type="submit">Agregar comentario</button>

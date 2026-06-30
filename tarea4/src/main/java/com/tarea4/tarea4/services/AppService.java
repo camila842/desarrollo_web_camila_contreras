@@ -29,6 +29,8 @@ import com.tarea4.tarea4.models.Foto;
 import com.tarea4.tarea4.models.FotoRepository;
 import com.tarea4.tarea4.models.Miembro;
 import com.tarea4.tarea4.models.MiembroRepository;
+//import com.tarea4.tarea4.models.Nota;
+import com.tarea4.tarea4.models.NotaRepository;
 import com.tarea4.tarea4.models.Region;
 
 import org.springframework.data.domain.Page;
@@ -45,39 +47,39 @@ public class AppService {
     private final FotoRepository fotoRepository;
     private final ComentarioRepository comentarioRepository;
     private final PasswordEncoder passwordEncoder;
+    private final NotaRepository notaRepository;
     private final String pathStatic;
 
     public AppService(
-        MiembroRepository miembroRepository,
-        ComunaRepository comunaRepository,
-        ActividadRepository actividadRepository,
-        FotoRepository fotoRepository,
-        ComentarioRepository comentarioRepository,
-        PasswordEncoder passwordEncoder
-    ) throws IOException {
+            MiembroRepository miembroRepository,
+            ComunaRepository comunaRepository,
+            ActividadRepository actividadRepository,
+            FotoRepository fotoRepository,
+            ComentarioRepository comentarioRepository,
+            PasswordEncoder passwordEncoder,
+            NotaRepository notaRepository) throws IOException {
         this.miembroRepository = miembroRepository;
         this.comunaRepository = comunaRepository;
         this.actividadRepository = actividadRepository;
         this.fotoRepository = fotoRepository;
         this.comentarioRepository = comentarioRepository;
         this.passwordEncoder = passwordEncoder;
+        this.notaRepository = notaRepository;
 
         Path staticDir = Paths.get(
-            ResourceUtils.getFile("classpath:static").getAbsolutePath()
-        );
+                ResourceUtils.getFile("classpath:static").getAbsolutePath());
 
         this.pathStatic = staticDir.toString();
         System.out.println("Static path resolved to: " + this.pathStatic);
     }
 
     public Miembro registerUser(
-        String username,
-        String lastname,
-        String email,
-        String rol,
-        String password,
-        Integer comunaId
-    ) {
+            String username,
+            String lastname,
+            String email,
+            String rol,
+            String password,
+            Integer comunaId) {
         Comuna comuna = null;
 
         if (comunaId != null) {
@@ -87,37 +89,34 @@ public class AppService {
         Boolean emailExists = miembroRepository.findByEmail(email).isPresent();
 
         String validationError = Miembro.validateRegisterUser(
-            username,
-            lastname,
-            email,
-            rol,
-            password,
-            comunaId,
-            emailExists
-        );
+                username,
+                lastname,
+                email,
+                rol,
+                password,
+                comunaId,
+                emailExists);
 
         if (!validationError.isEmpty()) {
             throw new IllegalArgumentException(validationError);
         }
 
         Miembro miembro = new Miembro(
-            username,
-            lastname,
-            rol,
-            email,
-            passwordEncoder.encode(password),
-            LocalDateTime.now(),
-            comuna
-        );
+                username,
+                lastname,
+                rol,
+                email,
+                passwordEncoder.encode(password),
+                LocalDateTime.now(),
+                comuna);
 
         return miembroRepository.save(miembro);
     }
 
     public Foto registerFoto(
-        Integer actividadId,
-        String rutaArchivo,
-        String nombreArchivo
-    ) {
+            Integer actividadId,
+            String rutaArchivo,
+            String nombreArchivo) {
         Actividad actividad = actividadRepository.findById(actividadId).orElse(null);
 
         if (actividad == null) {
@@ -125,17 +124,16 @@ public class AppService {
         }
 
         Foto foto = new Foto(
-            rutaArchivo,
-            nombreArchivo,
-            actividad
-        );
+                rutaArchivo,
+                nombreArchivo,
+                actividad);
 
         return fotoRepository.save(foto);
     }
+
     public Foto registerFotoFromUpload(
-        Integer actividadId,
-        MultipartFile archivo
-    ) throws Exception {
+            Integer actividadId,
+            MultipartFile archivo) throws Exception {
         Actividad actividad = actividadRepository.findById(actividadId).orElse(null);
 
         if (actividad == null) {
@@ -165,32 +163,31 @@ public class AppService {
         String rutaDb = "uploads/" + safeFilename;
 
         Foto foto = new Foto(
-            finalPath.toString(),
-            rutaDb,
-            actividad
-        );
+                finalPath.toString(),
+                rutaDb,
+                actividad);
 
         return fotoRepository.save(foto);
     }
 
     public Integer registerActivity(
-        String nombre,
-        List<String> dias,
-        String horaInicio,
-        String horaFin,
-        String tipo,
-        Integer miembroId,
-        MultipartFile archivo
-    ){
+            String nombre,
+            List<String> dias,
+            String horaInicio,
+            String horaFin,
+            String tipo,
+            Integer miembroId,
+            MultipartFile archivo,
+            String descripcion) {
         String validationError = Actividad.validateActivity(
-            nombre,
-            dias,
-            horaInicio,
-            horaFin,
-            tipo,
-            archivo,
-            miembroId
-        );
+                nombre,
+                dias,
+                horaInicio,
+                horaFin,
+                tipo,
+                archivo,
+                miembroId,
+                descripcion);
 
         if (!validationError.isEmpty()) {
             throw new IllegalArgumentException(validationError);
@@ -206,14 +203,13 @@ public class AppService {
 
         for (String dia : dias) {
             Actividad actividad = new Actividad(
-                miembro,
-                dia,
-                horaInicio,
-                duracion,
-                tipo,
-                nombre,
-                null
-            );
+                    miembro,
+                    dia,
+                    horaInicio,
+                    duracion,
+                    tipo,
+                    nombre,
+                    (descripcion != null && !descripcion.trim().isEmpty()) ? descripcion.trim() : null);
 
             Actividad savedActividad = actividadRepository.save(actividad);
             lastId = savedActividad.getId();
@@ -245,8 +241,8 @@ public class AppService {
             comunaData.put("nombre", comuna.getNombre());
 
             @SuppressWarnings("unchecked")
-            List<Map<String, Object>> comunasRegion =
-                (List<Map<String, Object>>) regionesMap.get(regionId).get("comunas");
+            List<Map<String, Object>> comunasRegion = (List<Map<String, Object>>) regionesMap.get(regionId)
+                    .get("comunas");
 
             comunasRegion.add(comunaData);
         }
@@ -319,11 +315,10 @@ public class AppService {
     }
 
     public List<Actividad> getActividadesByMiembroId(
-        Integer memberId,
-        String tipo,
-        String ordenAttr,
-        String ordenDir
-    ) {
+            Integer memberId,
+            String tipo,
+            String ordenAttr,
+            String ordenDir) {
         Sort sort = construirOrdenActividad(ordenAttr, ordenDir);
 
         if (tipo != null && !tipo.isEmpty()) {
@@ -358,11 +353,10 @@ public class AppService {
     }
 
     public Comentario crearComentario(
-        String nombre,
-        String texto,
-        Integer actividadId,
-        String palabrasProhibidasPath
-    ) {
+            String nombre,
+            String texto,
+            Integer actividadId,
+            String palabrasProhibidasPath) {
         if (!Comentario.validateComentario(nombre, texto, palabrasProhibidasPath)) {
             throw new IllegalArgumentException("El comentario no es válido.");
         }
@@ -374,11 +368,10 @@ public class AppService {
         }
 
         Comentario comentario = new Comentario(
-            nombre,
-            texto,
-            LocalDateTime.now(),
-            actividad
-        );
+                nombre,
+                texto,
+                LocalDateTime.now(),
+                actividad);
 
         return comentarioRepository.save(comentario);
     }
@@ -400,12 +393,11 @@ public class AppService {
     }
 
     public List<Miembro> getMiembrosPaginados(
-        Integer limit,
-        Integer offset,
-        String tipo,
-        String ordenAttr,
-        String ordenDir
-    ) {
+            Integer limit,
+            Integer offset,
+            String tipo,
+            String ordenAttr,
+            String ordenDir) {
         int page = offset / limit;
 
         Sort sort = construirOrdenMiembro(ordenAttr, ordenDir);
@@ -451,5 +443,16 @@ public class AppService {
 
         return Sort.by(columna).ascending();
     }
-    
+
+    public Double getPromedioNota(Integer actividadId) {
+        return notaRepository.findPromedioByActividadId(actividadId);
+    }
+
+    public Long getCantidadNotas(Integer actividadId) {
+        return notaRepository.countByActividadId(actividadId);
+    }
+
+    public boolean yaEvaluoActividad(Integer actividadId, Integer miembroId) {
+        return notaRepository.existsByActividadIdAndMiembroId(actividadId, miembroId);
+    }
 }

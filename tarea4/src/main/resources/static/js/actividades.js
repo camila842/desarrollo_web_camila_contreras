@@ -55,6 +55,21 @@ const checkNombre = () => {
     return valido;
 };
 
+const checkDescripcion = () => {
+    const descripcion = document.getElementById("descripcion").value;
+    const trimmed = descripcion ? descripcion.trim() : "";
+
+    if (trimmed.length === 0) {
+        document.getElementById("error-descripcion").className = "error";
+        return true;
+    }
+
+    const valido = trimmed.length >= 5 && trimmed.length <= 500;
+    document.getElementById("error-descripcion").className = valido ? "error" : "error visible";
+
+    return valido;
+};
+
 const checkTipo = () => {
     const tipo = document.getElementById("tipo-de-actividad").value;
     const valido = tipo !== "";
@@ -249,13 +264,14 @@ const validateActivity = (event) => {
     let valTip = validadorTipo(tipoActividad.value);
     let valDias = validateOneDay();
     let valFile = checkFile();
+    let valDes = checkDescripcion();
 
     errorNombre.className = valNom ? "error" : "error visible";
     errorTipo.className = valTip ? "error" : "error visible";
     errorDias.className = valDias ? "error" : "error visible";
     errorHoras.className = valDias ? "error" : "error visible";
 
-    if (!(valNom && valTip && valDias && valFile)) {
+    if (!(valNom && valTip && valDias && valFile && valDes)) {
         event.preventDefault();
     }
 };
@@ -276,6 +292,7 @@ const addActBtn = document.getElementById("add-activity");
 addActBtn.addEventListener("click", addActivity);
 
 document.getElementById("activity-name").addEventListener("input", checkNombre);
+document.getElementById("descripcion").addEventListener("input", checkDescripcion);
 document.getElementById("tipo-de-actividad").addEventListener("change", checkTipo);
 document.getElementById("file-input").addEventListener("change", checkFile);
 
